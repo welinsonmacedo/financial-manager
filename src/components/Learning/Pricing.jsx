@@ -24,18 +24,19 @@ const PricingList = styled.ul`
     flex-direction: column;
   justify-content: center;
   align-items: center;
+  gap: 2rem;
   }
 `;
 
 const Plan = styled.li`
-  background-color: #f5f5f5;
+  background-color: #f0e4e4;
   border-radius: 10px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   padding: 30px;
-  margin: 0 20px;
+ margin: 0 10px;
   flex: 1;
   max-width: 300px;
-  min-width: 200px;
+  min-width: 300px;
 `;
 
 const PlanTitle = styled.h3`

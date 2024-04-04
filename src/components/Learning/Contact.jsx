@@ -3,7 +3,12 @@ import styled from 'styled-components';
 
 const ContactContainer = styled.div`
   background-color: #f9f9f9;
-  padding: 50px;
+  padding: 10px;
+  @media (max-width: 900px) {
+   width: 300px;
+   display: block;
+   margin: 0 auto;
+  }
 `;
 
 const ContactTitle = styled.h2`
