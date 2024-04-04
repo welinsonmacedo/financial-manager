@@ -10,7 +10,8 @@ const Navbar = styled.nav`
   justify-content: space-evenly;
   align-items: center;
   position: fixed;
-  width: 100%;
+  width: auto;
+  min-width: 100%;
 
   @media (max-width: 900px) {
    height: 100px;
@@ -26,6 +27,7 @@ const Logo = styled.a`
   text-decoration: none;
   color: #fff;
   border-radius: 15px;
+  width: 100%;
   @media (max-width: 900px) {
    
    
@@ -73,6 +75,7 @@ const ToggleButton = styled.button`
   font-size: 1.5em;
   cursor: pointer;
   display: none;
+  width: 100%;
 
   @media (max-width: 900px) {
     display: flex;

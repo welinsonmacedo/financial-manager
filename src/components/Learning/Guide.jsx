@@ -11,6 +11,9 @@ const SectionTitle = styled.h2`
   font-size: 2em;
   color: #02a002;
   margin-bottom: 30px;
+  @media (max-width: 900px) {
+    font-size: 1em;
+  }
 `;
 
 const StepContainer = styled.div`

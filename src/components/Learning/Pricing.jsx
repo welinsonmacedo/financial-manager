@@ -35,8 +35,8 @@ const Plan = styled.li`
   padding: 30px;
  margin: 0 10px;
   flex: 1;
-  max-width: 300px;
-  min-width: 300px;
+  max-width: 250px;
+  min-width: 250px;
 `;
 
 const PlanTitle = styled.h3`
