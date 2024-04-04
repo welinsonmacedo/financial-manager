@@ -49,11 +49,10 @@ const Footer = () => {
         <FooterLogo src="footer.png" alt="Logo" />
         <FooterLinks>
           <FooterLink href="#home">Página Inicial</FooterLink>
-          <FooterLink href="#about">Quem Somos</FooterLink>
-          <FooterLink href="#features">Recursos</FooterLink>
+         
          
         </FooterLinks>
-        <FooterText>WelinsonMacedo © {new Date().getFullYear()} GerenteFinanceiro. Todos os direitos reservados.</FooterText>
+        <FooterText>WelinsonMacedo © {new Date().getFullYear()} <br /> GerenteFinanceiro. <br /> Todos os direitos reservados.</FooterText>
       </FooterContent>
     </FooterContainer>
   );

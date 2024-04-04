@@ -43,6 +43,10 @@ const BannerSlogan = styled.p`
   font-size: 2.5em;
   margin-bottom: 20px;
   text-transform: uppercase;
+  @media (max-width: 768px) {
+    
+    font-size: 1.5em;
+   }
 `;
 const ColoredText = styled.span`
   color: #24da00; 
@@ -50,6 +54,12 @@ const ColoredText = styled.span`
 const BannerText = styled.p`
   font-size: 1.5em;
   margin-bottom: 20px;
+  @media (max-width: 768px) {
+    max-width: 80%;
+    display: block;
+    margin: 0 auto;
+    font-size: 0.75em;
+   }
 `;
 
 const Button = styled.button`

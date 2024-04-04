@@ -12,10 +12,12 @@ const Navbar = styled.nav`
   position: fixed;
   width: 100%;
 
-  @media (max-width: 768px) {
+  @media (max-width: 900px) {
    height: 100px;
   display: flex;
   flex-direction: row-reverse;
+  justify-content: left;
+  gap: 2rem;
   }
 `;
 
@@ -24,8 +26,8 @@ const Logo = styled.a`
   text-decoration: none;
   color: #fff;
   border-radius: 15px;
-  @media (max-width: 768px) {
-    width:50%;
+  @media (max-width: 900px) {
+   
    
   }
 `;
@@ -35,7 +37,7 @@ const Menu = styled.ul`
   display: flex;
   align-items: center;
 
-  @media (max-width: 768px) {
+  @media (max-width: 900px) {
     display: ${({ isOpen }) => (isOpen ? 'flex' : 'none')};
     flex-direction: column;
     margin-top: 250px;
@@ -55,7 +57,7 @@ const MenuItem = styled.a`
     cursor: pointer;
     z-index: 2;
   }
-  @media (max-width: 768px) {
+  @media (max-width: 900px) {
     margin-right: 0;
     margin-bottom: 10px;
     font-size: 20px;
@@ -72,8 +74,15 @@ const ToggleButton = styled.button`
   cursor: pointer;
   display: none;
 
-  @media (max-width: 768px) {
+  @media (max-width: 900px) {
     display: flex;
+  }
+`;
+const Img = styled.img`
+  width: 350px;
+
+  @media (max-width: 900px) {
+    width: 250px;
   }
 `;
 const Button = styled.button`
@@ -88,7 +97,7 @@ const Button = styled.button`
   &:hover {
     background-color: #b6f5d5; 
   }
-  @media (max-width: 768px) {
+  @media (max-width: 900px) {
     
   }
 `;
@@ -110,7 +119,7 @@ const NavBar = () => {
     return (
         <Navbar>
             <Logo onClick={() => scrollToSection('home')}>
-                <img src="GERENTEFINANCEIRO.png" alt="" width='100%' />
+                <Img src="GERENTEFINANCEIRO.png" alt="logotipo "  />
             </Logo>
             <Menu isOpen={isOpen}>
                 <MenuItem onClick={() => scrollToSection('about')}>Quem somos</MenuItem>
