@@ -6,6 +6,7 @@ flex-direction: column;
 align-items: center;
 justify-content: center;
 padding-top: 3rem;
+width: 100%;
 `
 const BannerContainer = styled.div`
   background-color: #ffffff;
@@ -18,9 +19,10 @@ const BannerContainer = styled.div`
   gap: 3rem;
   align-items: center;
   @media (max-width: 768px) {
-    
+    flex-direction: column;
     align-items: center;
 justify-content: center;
+padding: 0;
   }
   
 `;

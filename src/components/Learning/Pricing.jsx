@@ -18,6 +18,13 @@ const PricingList = styled.ul`
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-wrap: wrap;
+  @media (max-width: 768px) {
+    display: flex;
+    flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  }
 `;
 
 const Plan = styled.li`

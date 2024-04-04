@@ -14,7 +14,8 @@ const Navbar = styled.nav`
 
   @media (max-width: 768px) {
    height: 100px;
-  
+  display: flex;
+  flex-direction: row-reverse;
   }
 `;
 
@@ -23,6 +24,10 @@ const Logo = styled.a`
   text-decoration: none;
   color: #fff;
   border-radius: 15px;
+  @media (max-width: 768px) {
+    width:50%;
+   
+  }
 `;
 
 const Menu = styled.ul`
@@ -33,13 +38,8 @@ const Menu = styled.ul`
   @media (max-width: 768px) {
     display: ${({ isOpen }) => (isOpen ? 'flex' : 'none')};
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    right: 41%;
-    top: 165px;
-
-    width: 100%;
+    margin-top: 250px;
+  
     background-color: #ffffff;
     padding: 20px;
    
@@ -110,7 +110,7 @@ const NavBar = () => {
     return (
         <Navbar>
             <Logo onClick={() => scrollToSection('home')}>
-                <img src="GERENTEFINANCEIRO.png" alt="" width='300px' />
+                <img src="GERENTEFINANCEIRO.png" alt="" width='100%' />
             </Logo>
             <Menu isOpen={isOpen}>
                 <MenuItem onClick={() => scrollToSection('about')}>Quem somos</MenuItem>
