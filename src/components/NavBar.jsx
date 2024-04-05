@@ -14,14 +14,10 @@ const Navbar = styled.div`
   min-width: 100%;
   width: auto;
 
-
-
   @media (max-width: 900px) {
- 
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 `;
 
@@ -30,10 +26,9 @@ const Logo = styled.a`
   text-decoration: none;
   color: #fff;
   border-radius: 15px;
-  width:auto;
+  width: auto;
+
   @media (max-width: 900px) {
-   
-   
   }
 `;
 
@@ -42,21 +37,20 @@ const Menu = styled.ul`
   display: flex;
   align-items: center;
   width: auto;
-justify-content: center;
+  justify-content: center;
+
   @media (max-width: 900px) {
     display: ${({ isOpen }) => (isOpen ? 'flex' : 'none')};
-    
     flex-direction: column;
     margin: 0;
     right: 190px;
-  width: 100%;
+    width: 100%;
     background-color: #ffffff;
     padding: 5px;
-   
   }
 `;
 
-const MenuItem = styled.li`
+const MenuItem = styled(NavLink)`
   margin-right: 20px;
   font-size: 15px;
   font-weight: 500;
@@ -74,7 +68,7 @@ const MenuItem = styled.li`
     padding: 5px;
   }
   &:hover {
-    background-color: #9ed1b6; 
+    background-color: #9ed1b6;
   }
 `;
 
@@ -93,70 +87,87 @@ const ToggleButton = styled.button`
 `;
 
 const Img = styled.img`
-display: flex;
+  display: flex;
   width: 350px;
 
- 
   @media (max-width: 900px) {
     display: ${({ isOpen }) => (isOpen ? 'none' : 'flex')};
     width: 250px;
   }
 `;
 
+const DropdownMenu = styled.div`
+  position: absolute;
+  display: ${({ isOpen }) => (isOpen ? 'block' : 'none')};
+  background-color: #ffffff;
+  min-width: 120px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+`;
 
-
-const Button = styled(NavLink)`
-  background-color: #59e778;
-  color: #000;
-  font-weight: 700;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  font-size: 1em;
-  cursor: pointer;
+const DropdownMenuItem = styled(NavLink)`
+  padding: 10px;
+  text-decoration: none;
+  display: block;
+  color: black;
   &:hover {
-    background-color: #b6f5d5; 
-  }
-  @media (max-width: 900px) {
-    
+    background-color: #f9f9f9;
   }
 `;
 
 const NavBar = () => {
-    const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [isConfigMenuOpen, setIsConfigMenuOpen] = useState(false);
 
-    const toggleMenu = () => {
-        setIsOpen(!isOpen);
-    };
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+  };
 
-    const scrollToSection = (id) => {
-        const element = document.getElementById(id);
-        if (element) {
-            element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-        setIsOpen(false); // Fechar o menu ao clicar em um item
-    };
+  const toggleConfigMenu = () => {
+    setIsConfigMenuOpen(!isConfigMenuOpen);
+  };
 
-    return (
-        <Navbar>
-            <Logo onClick={() => scrollToSection('home')}>
-                <Img isOpen={isOpen} src="GERENTEFINANCEIRO.png" alt="logotipo "  />
-            </Logo>
-            <Menu isOpen={isOpen}>
-                <MenuItem onClick={() => scrollToSection('about')}>Visão Geral</MenuItem>
-                <MenuItem onClick={() => scrollToSection('features')}>Lançamentos</MenuItem>
-                <MenuItem onClick={() => scrollToSection('pricing')}>Relatórios</MenuItem>
-                <MenuItem onClick={() => scrollToSection('pricing')}>Limite de Gastos</MenuItem>
-                <MenuItem onClick={() => scrollToSection('features')}> <FontAwesomeIcon icon={faCog} /></MenuItem>
-                <MenuItem onClick={() => scrollToSection('pricing')}><FontAwesomeIcon icon={faBell} /></MenuItem>
-                <MenuItem onClick={() => scrollToSection('pricing')}> <FontAwesomeIcon icon={faUser} /></MenuItem>
-                
-            </Menu>
-            <ToggleButton onClick={toggleMenu}>
-                {isOpen ? <FontAwesomeIcon icon={faTimes} /> : <FontAwesomeIcon icon={faBars} />}
-            </ToggleButton>
-        </Navbar>
-    );
+  const scrollToSection = (id) => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    setIsOpen(false); // Fechar o menu ao clicar em um item
+  };
+
+  return (
+    <Navbar>
+      <Logo onClick={() => scrollToSection('home')}>
+        <Img isOpen={isOpen} src="GERENTEFINANCEIRO.png" alt="logotipo " />
+      </Logo>
+      <Menu isOpen={isOpen}>
+        <MenuItem to="/home">Visão Geral</MenuItem>
+        <MenuItem to="/launches">Lançamentos</MenuItem>
+        <MenuItem onClick={() => scrollToSection('pricing')}>Relatórios</MenuItem>
+        <MenuItem onClick={() => scrollToSection('pricing')}>Limite de Gastos</MenuItem>
+        <MenuItem onClick={toggleConfigMenu}>
+          <FontAwesomeIcon icon={faCog} />
+          <DropdownMenu isOpen={isConfigMenuOpen}>
+            <DropdownMenuItem to="/config">Categorias</DropdownMenuItem>
+            <DropdownMenuItem to="/config">Contas</DropdownMenuItem>
+            <DropdownMenuItem to="/config">Cartões de Crédito</DropdownMenuItem>
+            <DropdownMenuItem to="/config">Preferências</DropdownMenuItem>
+            <DropdownMenuItem to="/config">Meu Plano</DropdownMenuItem>
+            {/* Adicione mais itens de menu conforme necessário */}
+          </DropdownMenu>
+        </MenuItem>
+        <MenuItem onClick={() => scrollToSection('pricing')}>
+          <FontAwesomeIcon icon={faBell} />
+        </MenuItem>
+        <MenuItem onClick={() => scrollToSection('pricing')}>
+          <FontAwesomeIcon icon={faUser} />
+        </MenuItem>
+      </Menu>
+      <ToggleButton onClick={toggleMenu}>
+        {isOpen ? <FontAwesomeIcon icon={faTimes} /> : <FontAwesomeIcon icon={faBars} />}
+      </ToggleButton>
+    </Navbar>
+  );
 };
 
 export default NavBar;

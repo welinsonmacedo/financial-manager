@@ -4,6 +4,9 @@ import Learning from '../pages/learning'
 import CreateAnAccount from '../components/Auth/CreateAnAccount';
 import Login from '../components/Auth/Login';
 import Home from '../pages/home';
+import LaunchesComponent from '../components/LaunchesComponent';
+import ConfigComponent from '../components/ConfigComponent';
+
 
 const RoutesApp = () => {
   return (
@@ -13,7 +16,8 @@ const RoutesApp = () => {
         <Route exact path="/createaccount" element={<CreateAnAccount/>} />
         <Route exact path="/login" element={<Login/>} />
         <Route exact path="/home" element={<Home/>} />
-        
+        <Route exact path="/launches" element={<LaunchesComponent/>} />
+        <Route exact path="/config" element={<ConfigComponent/>} />
        
       </Routes>
     </Router>

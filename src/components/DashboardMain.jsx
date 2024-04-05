@@ -145,14 +145,7 @@ const MainDashboard = ({ name }) => {
                     <Icon><FontAwesomeIcon icon={faMoneyBillAlt} color='red'/></Icon>
                     <Title>Despesa</Title>
                 </Action>
-                <Action>
-                    <Icon><FontAwesomeIcon icon={faExchangeAlt} color='blue'/></Icon>
-                    <Title>Transf.</Title>
-                </Action>
-                <Action>
-                    <Icon><FontAwesomeIcon icon={faFileImport} color='orange' /></Icon>
-                    <Title>Importar</Title>
-                </Action>
+               
             </QuickAccess>
         </Container>
     );
