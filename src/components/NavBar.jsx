@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faTimes, faCog, faBell, faUser } from '@fortawesome/free-solid-svg-icons';
 import { NavLink } from 'react-router-dom';
 
 const Navbar = styled.nav`
@@ -83,6 +83,7 @@ const ToggleButton = styled.button`
     display: flex;
   }
 `;
+
 const Img = styled.img`
   width: 350px;
 
@@ -90,24 +91,9 @@ const Img = styled.img`
     width: 250px;
   }
 `;
-const MenuItemLogin = styled(NavLink)`
-  margin-right: 20px;
-  font-size: 15px;
-  font-weight: 500;
-  color:#000;
-  &:hover {
-    border-bottom: 2px solid gray;
-    cursor: pointer;
-    z-index: 2;
-  }
-  @media (max-width: 900px) {
-    margin-right: 0;
-    margin-bottom: 10px;
-    font-size: 20px;
-    width: 100%;
-    display: block;
-  }
-`;
+
+
+
 const Button = styled(NavLink)`
   background-color: #59e778;
   color: #000;
@@ -124,6 +110,7 @@ const Button = styled(NavLink)`
     
   }
 `;
+
 const NavBar = () => {
     const [isOpen, setIsOpen] = useState(false);
 
@@ -145,11 +132,14 @@ const NavBar = () => {
                 <Img src="GERENTEFINANCEIRO.png" alt="logotipo "  />
             </Logo>
             <Menu isOpen={isOpen}>
-                <MenuItem onClick={() => scrollToSection('about')}>Quem somos</MenuItem>
-                <MenuItem onClick={() => scrollToSection('features')}>Recursos</MenuItem>
-                <MenuItem onClick={() => scrollToSection('pricing')}>Planos e preços</MenuItem>
-                <MenuItemLogin to='/login'>Login</MenuItemLogin>
-                <Button to='/createaccount'>Cadastrar</Button>
+                <MenuItem onClick={() => scrollToSection('about')}>Visão Geral</MenuItem>
+                <MenuItem onClick={() => scrollToSection('features')}>Lançamentos</MenuItem>
+                <MenuItem onClick={() => scrollToSection('pricing')}>Relatórios</MenuItem>
+                <MenuItem onClick={() => scrollToSection('pricing')}>Limite de Gastos</MenuItem>
+                <MenuItem onClick={() => scrollToSection('features')}> <FontAwesomeIcon icon={faCog} /></MenuItem>
+                <MenuItem onClick={() => scrollToSection('pricing')}><FontAwesomeIcon icon={faBell} /></MenuItem>
+                <MenuItem onClick={() => scrollToSection('pricing')}> <FontAwesomeIcon icon={faUser} /></MenuItem>
+                
             </Menu>
             <ToggleButton onClick={toggleMenu}>
                 {isOpen ? <FontAwesomeIcon icon={faTimes} /> : <FontAwesomeIcon icon={faBars} />}

@@ -1,11 +1,11 @@
 
 import './App.css';
-import LearningPage from './pages/learning.jsx';
+import RoutesApp from './routes/routes.js';
 
 function App() {
   return (
     <div >
-     <LearningPage/>
+     <RoutesApp/>
     </div>
   );
 }
