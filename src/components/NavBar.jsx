@@ -4,22 +4,24 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faTimes, faCog, faBell, faUser } from '@fortawesome/free-solid-svg-icons';
 import { NavLink } from 'react-router-dom';
 
-const Navbar = styled.nav`
+const Navbar = styled.div`
   background-color: #ffffff;
   color: #000000;
   display: flex;
   justify-content: space-evenly;
   align-items: center;
   position: fixed;
-  width: auto;
   min-width: 100%;
+  width: auto;
+
+
 
   @media (max-width: 900px) {
-   height: 100px;
+ 
   display: flex;
-  flex-direction: row-reverse;
-  justify-content: left;
-  gap: 2rem;
+  justify-content: space-between;
+  align-items: center;
+  
   }
 `;
 
@@ -43,16 +45,18 @@ const Menu = styled.ul`
 justify-content: center;
   @media (max-width: 900px) {
     display: ${({ isOpen }) => (isOpen ? 'flex' : 'none')};
+    
     flex-direction: column;
-    margin-top: 250px;
-  
+    margin: 0;
+    right: 190px;
+  width: 100%;
     background-color: #ffffff;
-    padding: 20px;
+    padding: 5px;
    
   }
 `;
 
-const MenuItem = styled.a`
+const MenuItem = styled.li`
   margin-right: 20px;
   font-size: 15px;
   font-weight: 500;
@@ -67,6 +71,10 @@ const MenuItem = styled.a`
     font-size: 20px;
     width: 100%;
     display: block;
+    padding: 5px;
+  }
+  &:hover {
+    background-color: #9ed1b6; 
   }
 `;
 
@@ -85,9 +93,12 @@ const ToggleButton = styled.button`
 `;
 
 const Img = styled.img`
+display: flex;
   width: 350px;
 
+ 
   @media (max-width: 900px) {
+    display: ${({ isOpen }) => (isOpen ? 'none' : 'flex')};
     width: 250px;
   }
 `;
@@ -129,7 +140,7 @@ const NavBar = () => {
     return (
         <Navbar>
             <Logo onClick={() => scrollToSection('home')}>
-                <Img src="GERENTEFINANCEIRO.png" alt="logotipo "  />
+                <Img isOpen={isOpen} src="GERENTEFINANCEIRO.png" alt="logotipo "  />
             </Logo>
             <Menu isOpen={isOpen}>
                 <MenuItem onClick={() => scrollToSection('about')}>Visão Geral</MenuItem>

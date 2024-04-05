@@ -2,8 +2,10 @@ import React from 'react';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMoneyBillAlt, faDollarSign, faExchangeAlt, faFileImport } from '@fortawesome/free-solid-svg-icons';
+import { NavLink } from 'react-router-dom';
 
 const Container = styled.div`
+
 padding-top: 4rem;
   text-align: center;
 `;
@@ -16,7 +18,7 @@ const UserName = styled.span`
   font-weight: bold;
 `;
 
-const SectionTitle = styled.h2`
+const SectionTitle = styled.p`
   margin-top: 20px;
   font-size: 1.5em;
 `;
@@ -24,6 +26,28 @@ const SectionTitle = styled.h2`
 const Section = styled.div`
   margin-top: 10px;
 `;
+const SectionInfo = styled.div`
+  margin-top: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+`;
+const SectionInfoGroup = styled.div`
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 2px 2px 2px 2px #e7e7df;
+  padding: 5px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+`;
+
+
 
 const QuickAccess = styled.div`
   display: flex;
@@ -31,6 +55,7 @@ const QuickAccess = styled.div`
   margin-top: 30px;
   flex-wrap: wrap;
   gap: 2rem;
+padding: 2rem;
 `;
 
 const Action = styled.div`
@@ -54,58 +79,83 @@ const Icon = styled.span`
 const Title = styled.p`
   font-size: 1.1em;
 `;
+const Button = styled(NavLink)`
+  background-color: #30b94e;
+  color: #ffffff;
+  font-weight: 700;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1em;
+  cursor: pointer;
+  &:hover {
+    background-color: #15241c; 
+  }
+  @media (max-width: 900px) {
+    
+  }
+`;
 
 const MainDashboard = ({ name }) => {
-  const now = new Date();
-  const hour = now.getHours();
-  let greeting = '';
+    const now = new Date();
+    const hour = now.getHours();
+    let greeting = '';
 
-  if (hour >= 5 && hour < 12) {
-    greeting = 'Bom dia';
-  } else if (hour >= 12 && hour < 18) {
-    greeting = 'Boa tarde';
-  } else if (hour >= 0 && hour < 5) {
-    greeting = 'Boa Madrugada';
-  } 
-  else {
-    greeting = 'Boa noite';
-  }
+    if (hour >= 5 && hour < 12) {
+        greeting = 'Bom dia';
+    } else if (hour >= 12 && hour < 18) {
+        greeting = 'Boa tarde';
+    } else if (hour >= 0 && hour < 5) {
+        greeting = 'Boa Madrugada';
+    }
+    else {
+        greeting = 'Boa noite';
+    }
 
-  return (
-    <Container>
-      <Greeting>{greeting}, <UserName>{name}</UserName>!</Greeting>
-      <SectionTitle>Receita mensal</SectionTitle>
-      <Section>
-        <p>R$ 0,00</p>
-      </Section>
-      <SectionTitle>Despesa mensal</SectionTitle>
-      <Section>
-        <p>R$ 0,00</p>
-      </Section>
-      <Section>
-        <a href="/reports">Ver relatórios</a>
-      </Section>
-      <SectionTitle>Acesso rápido</SectionTitle>
-      <QuickAccess>
-        <Action>
-          <Icon><FontAwesomeIcon icon={faDollarSign} /></Icon>
-          <Title>Receita</Title>
-        </Action>
-        <Action>
-          <Icon><FontAwesomeIcon icon={faMoneyBillAlt} /></Icon>
-          <Title>Despesa</Title>
-        </Action>
-        <Action>
-          <Icon><FontAwesomeIcon icon={faExchangeAlt} /></Icon>
-          <Title>Transf.</Title>
-        </Action>
-        <Action>
-          <Icon><FontAwesomeIcon icon={faFileImport} /></Icon>
-          <Title>Importar</Title>
-        </Action>
-      </QuickAccess>
-    </Container>
-  );
+    return (
+        <Container>
+
+            <Greeting>{greeting}, <UserName>{name}</UserName>!</Greeting>
+            <SectionInfo>
+                <SectionInfoGroup>
+                <SectionTitle>Receita mensal</SectionTitle>
+                <Section>
+                    <p>R$ 0,00</p>
+                </Section>
+                </SectionInfoGroup>
+                <SectionInfoGroup>
+                <SectionTitle>Despesa mensal</SectionTitle>
+                <Section>
+                   <p>R$ 0,00</p>
+                </Section>
+                    </SectionInfoGroup>
+               
+               
+                <Section>
+                <Button to='/reports'>Ver relatórios</Button>   
+                </Section>
+            </SectionInfo>
+            <SectionTitle>Acesso rápido</SectionTitle>
+            <QuickAccess>
+                <Action>
+                    <Icon><FontAwesomeIcon icon={faDollarSign} color='green' /></Icon>
+                    <Title>Receita</Title>
+                </Action>
+                <Action>
+                    <Icon><FontAwesomeIcon icon={faMoneyBillAlt} color='red'/></Icon>
+                    <Title>Despesa</Title>
+                </Action>
+                <Action>
+                    <Icon><FontAwesomeIcon icon={faExchangeAlt} color='blue'/></Icon>
+                    <Title>Transf.</Title>
+                </Action>
+                <Action>
+                    <Icon><FontAwesomeIcon icon={faFileImport} color='orange' /></Icon>
+                    <Title>Importar</Title>
+                </Action>
+            </QuickAccess>
+        </Container>
+    );
 };
 
 export default MainDashboard

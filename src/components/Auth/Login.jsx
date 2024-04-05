@@ -107,9 +107,9 @@ const Login = () => {
         e.preventDefault();
         try {
             await signInWithEmailAndPassword(auth, email, password);
-            console.log('Login successful!');
+            alert('Login successful!');
         } catch (error) {
-            console.error('Error logging in:', error.message);
+            alert('Error logging in: ' + error.message);
         }
     };
 
@@ -121,10 +121,9 @@ const Login = () => {
     const handleSocialLogin = async (provider) => {
         try {
             await signInWithPopup(auth, provider);
-           
-            console.log('Login successful!');
+            alert('Login successful!');
         } catch (error) {
-            console.error('Error logging in:', error.message);
+            alert('Error logging in: ' + error.message);
         }
     };
    

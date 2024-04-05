@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { auth } from "../../config/firebaseConfig";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { GoogleAuthProvider,signInWithPopup} from 'firebase/auth';
+import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 
 const CreateAnAccountContainer = styled.div`
   max-width: 400px;
@@ -102,10 +102,10 @@ const CreateAnAccount = () => {
   const handleSignUp = async (e) => {
     e.preventDefault();
     try {
-      await createUserWithEmailAndPassword(auth,email, password);
-      console.log('Sign up successful!');
+      await createUserWithEmailAndPassword(auth, email, password);
+      alert('Cadastro realizado com sucesso!');
     } catch (error) {
-      console.error('Error signing up:', error.message);
+      alert('Erro ao cadastrar: ' + error.message);
     }
   };
 
@@ -117,9 +117,9 @@ const CreateAnAccount = () => {
   const handleSocialSignUp = async (provider) => {
     try {
       await signInWithPopup(auth, provider);
-      console.log('Sign up successful!');
+      alert('Cadastro realizado com sucesso!');
     } catch (error) {
-      console.error('Error signing up:', error.message);
+      alert('Erro ao cadastrar: ' + error.message);
     }
   };
 
