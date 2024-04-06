@@ -118,6 +118,7 @@ const DropdownMenuItem = styled(NavLink)`
 const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isConfigMenuOpen, setIsConfigMenuOpen] = useState(false);
+ 
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -126,6 +127,8 @@ const NavBar = () => {
   const toggleConfigMenu = () => {
     setIsConfigMenuOpen(!isConfigMenuOpen);
   };
+
+  
 
   const scrollToSection = (id) => {
     const element = document.getElementById(id);
@@ -148,7 +151,10 @@ const NavBar = () => {
         <MenuItem onClick={toggleConfigMenu}>
           <FontAwesomeIcon icon={faCog} />
           <DropdownMenu isOpen={isConfigMenuOpen}>
-            <DropdownMenuItem to="/config">Categorias</DropdownMenuItem>
+
+            <DropdownMenuItem to="/categoryexpense">Cadastro Categoria Despesas</DropdownMenuItem>
+            <DropdownMenuItem to="/categoryincome">Cadastro Categoria Receitas</DropdownMenuItem>
+
             <DropdownMenuItem to="/config">Contas</DropdownMenuItem>
             <DropdownMenuItem to="/config">Cartões de Crédito</DropdownMenuItem>
             <DropdownMenuItem to="/config">Preferências</DropdownMenuItem>

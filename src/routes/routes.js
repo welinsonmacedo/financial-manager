@@ -6,6 +6,7 @@ import Login from '../components/Auth/Login';
 import Home from '../pages/home';
 import LaunchesComponent from '../components/LaunchesComponent';
 import ConfigComponent from '../components/ConfigComponent';
+import CreateCategory from '../components/CreateCategory';
 
 
 const RoutesApp = () => {
@@ -18,6 +19,8 @@ const RoutesApp = () => {
         <Route exact path="/home" element={<Home/>} />
         <Route exact path="/launches" element={<LaunchesComponent/>} />
         <Route exact path="/config" element={<ConfigComponent/>} />
+        <Route exact path="/categoryexpense" element={<CreateCategory type="expense" /> } />
+        <Route exact path="/categoryincome" element={<CreateCategory type="income" />} />
        
       </Routes>
     </Router>
