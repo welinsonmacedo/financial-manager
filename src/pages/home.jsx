@@ -15,6 +15,7 @@ justify-content: space-evenly;
 align-items: center;
 flex-wrap: wrap;
 padding: 20px;
+gap: 1rem;
 
 `
 const Home = () => {

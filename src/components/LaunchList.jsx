@@ -1,5 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import { getFirestore, collection, getDocs, where, query } from 'firebase/firestore';
+import { app, auth } from '../config/firebaseConfig';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import CurrencyFormatter from './common/CurrencyFormatter';
+import DateFormatter from './common/DateFormatter';
+
+const db = getFirestore(app);
 
 const Container = styled.div`
   max-width: 600px;
@@ -41,25 +48,79 @@ const Select = styled.select`
   border-radius: 5px;
   width: 100%;
 `;
+
 const SectionTitle = styled.p`
   margin-top: 20px;
   font-size: 1.5em;
 `;
-const LaunchList = ({ launches }) => {
-  const [filteredLaunches, setFilteredLaunches] = useState(launches);
+
+const LaunchList = () => {
+  const [launches, setLaunches] = useState([]);
+  const [filteredLaunches, setFilteredLaunches] = useState([]);
   const [selectedType, setSelectedType] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
+  const [user] = useAuthState(auth);
+  const currentUser = auth.currentUser;
+  const [incomeCategories, setIncomeCategories] = useState([]);
+  const [expenseCategories, setExpenseCategories] = useState([]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        if (currentUser) {
+          const incomeCategoriesQuery = query(collection(db, 'incomeCategories'), where('userId', '==', currentUser.uid));
+          const expenseCategoriesQuery = query(collection(db, 'expenseCategories'), where('userId', '==', currentUser.uid));
+          const incomeCategoriesSnapshot = await getDocs(incomeCategoriesQuery);
+          const expenseCategoriesSnapshot = await getDocs(expenseCategoriesQuery);
+          const incomeCategoriesData = incomeCategoriesSnapshot.docs.map(doc => doc.data());
+          const expenseCategoriesData = expenseCategoriesSnapshot.docs.map(doc => doc.data());
+          setIncomeCategories(incomeCategoriesData);
+          setExpenseCategories(expenseCategoriesData);
+        }
+      } catch (error) {
+        console.error('Erro ao buscar categorias:', error);
+      }
+    };
+  
+    fetchCategories();
+  }, [currentUser]);
+
+  useEffect(() => {
+    const fetchLaunches = async () => {
+      try {
+        if (currentUser) {
+          const launchesQuery = query(collection(db, 'launches'), where('userId', '==', currentUser.uid));
+          const launchesSnapshot = await getDocs(launchesQuery);
+          const launchesData = launchesSnapshot.docs.map(doc => doc.data());
+          setLaunches(launchesData);
+          setFilteredLaunches(launchesData);
+        } else {
+          console.log('Usuário não autenticado.');
+        }
+      } catch (error) {
+        console.error('Erro ao buscar lançamentos:', error);
+      }
+    };
+  
+    fetchLaunches();
+  }, [currentUser]);
 
   const handleFilter = () => {
     let filtered = launches;
+  
+    // Filtrar por tipo
     if (selectedType) {
       filtered = filtered.filter(launch => launch.type === selectedType);
     }
+  
+    // Filtrar por categoria, apenas se uma categoria for selecionada
     if (selectedCategory) {
       filtered = filtered.filter(launch => launch.category === selectedCategory);
     }
+  
     setFilteredLaunches(filtered);
   };
+  
 
   const handleChangeType = (e) => {
     setSelectedType(e.target.value);
@@ -78,17 +139,18 @@ const LaunchList = ({ launches }) => {
         <Label htmlFor="type">Tipo:</Label>
         <Select id="type" value={selectedType} onChange={handleChangeType}>
           <option value="">Todos</option>
-          <option value="Despesa">Despesa</option>
-          <option value="Receita">Receita</option>
+          {incomeCategories.map(category => (
+            <option key={category.id} value={category.name}>{category.name}</option>
+          ))}
         </Select>
       </div>
       <div>
         <Label htmlFor="category">Categoria:</Label>
         <Select id="category" value={selectedCategory} onChange={handleChangeCategory}>
           <option value="">Todas</option>
-          <option value="Alimentação">Alimentação</option>
-          <option value="Transporte">Transporte</option>
-          {/* Adicione mais opções de categoria conforme necessário */}
+          {expenseCategories.map(category => (
+            <option key={category.id} value={category.name}>{category.name}</option>
+          ))}
         </Select>
       </div>
       <StyledTable>
@@ -105,8 +167,10 @@ const LaunchList = ({ launches }) => {
             <TableRow key={index}>
               <TableCell>{launch.type}</TableCell>
               <TableCell>{launch.category}</TableCell>
-              <TableCell>{launch.amount}</TableCell>
-              <TableCell>{launch.date}</TableCell>
+              <TableCell><CurrencyFormatter value={launch.amount} ></CurrencyFormatter></TableCell>
+              <TableCell><DateFormatter date={launch.date}></DateFormatter></TableCell>
+              
+              
             </TableRow>
           ))}
         </tbody>

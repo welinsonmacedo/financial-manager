@@ -7,6 +7,9 @@ align-items: center;
 justify-content: center;
 padding-top: 3rem;
 width: 100%;
+@media (max-width: 900px) {
+  padding-top: 9rem;
+  }
 `
 const BannerContainer = styled.div`
   background-color: #ffffff;

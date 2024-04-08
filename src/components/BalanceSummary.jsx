@@ -31,15 +31,29 @@ const BalanceValue = styled.span`
 `;
 
 const BalanceSummary = ({ balance }) => {
-  return (
-    <Container>
-      <Title>Resumo do Saldo</Title>
-      <BalanceContainer>
-        <BalanceLabel>Saldo Atual:</BalanceLabel>
-        <BalanceValue>R${balance.toFixed(2)} BRL</BalanceValue>
-      </BalanceContainer>
-    </Container>
-  );
+  // Verifica se balance é um número e se não é NaN (Not a Number)
+  if (typeof balance === 'number' && !isNaN(balance)) {
+    return (
+      <Container>
+        <Title>Resumo do Saldo</Title>
+        <BalanceContainer>
+          <BalanceLabel>Saldo Atual:</BalanceLabel>
+          <BalanceValue>R${balance.toFixed(2)} BRL</BalanceValue>
+        </BalanceContainer>
+      </Container>
+    );
+  } else {
+    // Caso balance seja indefinido, nulo ou não seja um número válido
+    return (
+      <Container>
+        <Title>Resumo do Saldo</Title>
+        <BalanceContainer>
+          <BalanceLabel>Saldo Atual:</BalanceLabel>
+          <BalanceValue>R$0.00 BRL</BalanceValue>
+        </BalanceContainer>
+      </Container>
+    );
+  }
 };
 
 export default BalanceSummary;

@@ -5,6 +5,7 @@ import { faCoffee, faCar, faPlane, faUtensils, faDog } from '@fortawesome/free-s
 import { getAuth } from 'firebase/auth'; // Importe a função necessária do Firebase Authentication
 import { getFirestore, collection, addDoc } from 'firebase/firestore';
 import { app } from '../config/firebaseConfig';
+import NavBar from './NavBar';
 
 const db = getFirestore(app);
 const auth = getAuth(app); // Obtenha a instância de autenticação do Firebase
@@ -16,6 +17,7 @@ const Container = styled.div`
   align-items: center;
  gap: 10px;
   padding: 20px;
+
 `;
 
 const Form = styled.form`
@@ -25,6 +27,7 @@ const Form = styled.form`
 justify-content: center;
   padding: 20px;
   gap: 10px;
+  padding-top: 5rem;
 `;
 
 const Label = styled.label`
@@ -113,7 +116,8 @@ const CreateCategory = ({ type }) => {
                 name,
                 color,
                 icon,
-                userId: user ? user.uid : null // Salva o ID do usuário se estiver autenticado, caso contrário, salva null
+                type,
+                userId:  user.uid 
             };
             const categoriesCollection = collection(db, type === 'expense' ? 'expenseCategories' : 'incomeCategories');
             await addDoc(categoriesCollection, categoryData);
@@ -128,8 +132,11 @@ const CreateCategory = ({ type }) => {
 
     return (
         <Container>
-            <h4>Criar Categoria de {type === 'expense' ? 'Despesa' : 'Receita'}</h4>
+          <NavBar/>
+          
+          
             <Form onSubmit={handleCreateCategory}>
+            <h4>Criar Categoria de {type === 'expense' ? 'Despesa' : 'Receita'}</h4>
                 <Label>Nome da Categoria:</Label>
 
 

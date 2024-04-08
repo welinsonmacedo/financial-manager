@@ -4,14 +4,17 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMoneyBillAlt, faDollarSign, faExchangeAlt, faFileImport } from '@fortawesome/free-solid-svg-icons';
 import { NavLink } from 'react-router-dom';
 
+
 const Container = styled.div`
 
 padding-top: 4rem;
   text-align: center;
+ 
 `;
 
 const Greeting = styled.p`
   font-size: 1.2em;
+  
 `;
 
 const UserName = styled.span`
@@ -97,58 +100,59 @@ const Button = styled(NavLink)`
 `;
 
 const MainDashboard = ({ name }) => {
-    const now = new Date();
-    const hour = now.getHours();
-    let greeting = '';
+  const now = new Date();
+  const hour = now.getHours();
+  let greeting = '';
 
-    if (hour >= 5 && hour < 12) {
-        greeting = 'Bom dia';
-    } else if (hour >= 12 && hour < 18) {
-        greeting = 'Boa tarde';
-    } else if (hour >= 0 && hour < 5) {
-        greeting = 'Boa Madrugada';
-    }
-    else {
-        greeting = 'Boa noite';
-    }
+  if (hour >= 5 && hour < 12) {
+    greeting = 'Bom dia';
+  } else if (hour >= 12 && hour < 18) {
+    greeting = 'Boa tarde';
+  } else if (hour >= 0 && hour < 5) {
+    greeting = 'Boa Madrugada';
+  }
+  else {
+    greeting = 'Boa noite';
+  }
 
-    return (
-        <Container>
+  return (
+    <Container>
+    
 
-            <Greeting>{greeting}, <UserName>{name}</UserName>!</Greeting>
-            <SectionInfo>
-                <SectionInfoGroup>
-                <SectionTitle>Receita mensal</SectionTitle>
-                <Section>
-                    <p>R$ 0,00</p>
-                </Section>
-                </SectionInfoGroup>
-                <SectionInfoGroup>
-                <SectionTitle>Despesa mensal</SectionTitle>
-                <Section>
-                   <p>R$ 0,00</p>
-                </Section>
-                    </SectionInfoGroup>
-               
-               
-                <Section>
-                <Button to='/reports'>Ver relatórios</Button>   
-                </Section>
-            </SectionInfo>
-            <SectionTitle>Acesso rápido</SectionTitle>
-            <QuickAccess>
-                <Action>
-                    <Icon><FontAwesomeIcon icon={faDollarSign} color='green' /></Icon>
-                    <Title>Receita</Title>
-                </Action>
-                <Action>
-                    <Icon><FontAwesomeIcon icon={faMoneyBillAlt} color='red'/></Icon>
-                    <Title>Despesa</Title>
-                </Action>
-               
-            </QuickAccess>
-        </Container>
-    );
+      <Greeting>{greeting}, <UserName>{name}</UserName>!</Greeting>
+      <SectionInfo>
+        <SectionInfoGroup>
+          <SectionTitle>Receita mensal</SectionTitle>
+          <Section>
+            <p>R$ 0,00</p>
+          </Section>
+        </SectionInfoGroup>
+        <SectionInfoGroup>
+          <SectionTitle>Despesa mensal</SectionTitle>
+          <Section>
+            <p>R$ 0,00</p>
+          </Section>
+        </SectionInfoGroup>
+
+
+        <Section>
+          <Button to='/reports'>Ver relatórios</Button>
+        </Section>
+      </SectionInfo>
+      <SectionTitle>Acesso rápido</SectionTitle>
+      <QuickAccess>
+        <Action>
+          <Icon><FontAwesomeIcon icon={faDollarSign} color='green' /></Icon>
+          <Title>Receita</Title>
+        </Action>
+        <Action>
+          <Icon><FontAwesomeIcon icon={faMoneyBillAlt} color='red' /></Icon>
+          <Title>Despesa</Title>
+        </Action>
+
+      </QuickAccess>
+    </Container>
+  );
 };
 
 export default MainDashboard

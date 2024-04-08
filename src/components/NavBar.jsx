@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faTimes, faCog, faBell, faUser } from '@fortawesome/free-solid-svg-icons';
 import { NavLink } from 'react-router-dom';
+import UserStatus from './../config/UserStatus';
 
 const Navbar = styled.div`
   background-color: #ffffff;
@@ -18,6 +19,7 @@ const Navbar = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
+  
   }
 `;
 
@@ -27,6 +29,7 @@ const Logo = styled.a`
   color: #fff;
   border-radius: 15px;
   width: auto;
+  cursor: pointer;
 
   @media (max-width: 900px) {
   }
@@ -79,10 +82,11 @@ const ToggleButton = styled.button`
   font-size: 1.5em;
   cursor: pointer;
   display: none;
-  width: 100%;
+
 
   @media (max-width: 900px) {
     display: flex;
+    padding-left: 5px;
   }
 `;
 
@@ -140,9 +144,14 @@ const NavBar = () => {
 
   return (
     <Navbar>
+       <ToggleButton onClick={toggleMenu}>
+        {isOpen ? <FontAwesomeIcon icon={faTimes} /> : <FontAwesomeIcon icon={faBars} />}
+      </ToggleButton>
+    <UserStatus/>
       <Logo onClick={() => scrollToSection('home')}>
         <Img isOpen={isOpen} src="GERENTEFINANCEIRO.png" alt="logotipo " />
       </Logo>
+     
       <Menu isOpen={isOpen}>
         <MenuItem to="/home">Visão Geral</MenuItem>
         <MenuItem to="/launches">Lançamentos</MenuItem>
@@ -168,10 +177,9 @@ const NavBar = () => {
         <MenuItem onClick={() => scrollToSection('pricing')}>
           <FontAwesomeIcon icon={faUser} />
         </MenuItem>
+      
       </Menu>
-      <ToggleButton onClick={toggleMenu}>
-        {isOpen ? <FontAwesomeIcon icon={faTimes} /> : <FontAwesomeIcon icon={faBars} />}
-      </ToggleButton>
+     
     </Navbar>
   );
 };

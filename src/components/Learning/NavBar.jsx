@@ -20,6 +20,7 @@ const Navbar = styled.nav`
   flex-direction: row-reverse;
   justify-content: left;
   gap: 2rem;
+padding-left: 2rem;
   }
 `;
 
