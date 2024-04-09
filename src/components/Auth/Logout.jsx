@@ -9,7 +9,7 @@ const Logout = () => {
     try {
       await auth.signOut();
       console.log('Logout successful!');
-      navigate('/'); // Redireciona para a página inicial após o logout
+      navigate('/'); 
     } catch (error) {
       console.error('Error logging out:', error.message);
     }

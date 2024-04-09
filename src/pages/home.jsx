@@ -24,10 +24,10 @@ const Home = () => {
         <>
             <NavBar />
             <MainDashboard />
-            <SectionBalanceAndBills>
+            
                 <BalanceComponent />
-                <BillsComponent />
-            </SectionBalanceAndBills>
+               
+           
             <SectionBalanceAndBills>
             <PayableComponent />
             <ReceivableComponent />

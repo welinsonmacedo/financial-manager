@@ -1,20 +1,20 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMoneyBillAlt, faDollarSign, faExchangeAlt, faFileImport } from '@fortawesome/free-solid-svg-icons';
+import { faMoneyBillAlt, faDollarSign } from '@fortawesome/free-solid-svg-icons';
 import { NavLink } from 'react-router-dom';
+import { getFirestore, collection, getDocs, where, query } from 'firebase/firestore';
+import { app, auth } from '../config/firebaseConfig';
 
+const db = getFirestore(app);
 
 const Container = styled.div`
-
-padding-top: 4rem;
+  padding-top: 4rem;
   text-align: center;
- 
 `;
 
 const Greeting = styled.p`
   font-size: 1.2em;
-  
 `;
 
 const UserName = styled.span`
@@ -29,6 +29,7 @@ const SectionTitle = styled.p`
 const Section = styled.div`
   margin-top: 10px;
 `;
+
 const SectionInfo = styled.div`
   margin-top: 10px;
   display: flex;
@@ -38,6 +39,7 @@ const SectionInfo = styled.div`
   flex-wrap: wrap;
   gap: 15px;
 `;
+
 const SectionInfoGroup = styled.div`
   margin-top: 10px;
   display: flex;
@@ -50,18 +52,16 @@ const SectionInfoGroup = styled.div`
   margin-bottom: 20px;
 `;
 
-
-
 const QuickAccess = styled.div`
   display: flex;
   justify-content: space-evenly;
   margin-top: 30px;
   flex-wrap: wrap;
   gap: 2rem;
-padding: 2rem;
+  padding: 2rem;
 `;
 
-const Action = styled.div`
+const Action = styled(NavLink)`
   flex: 1;
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -82,24 +82,62 @@ const Icon = styled.span`
 const Title = styled.p`
   font-size: 1.1em;
 `;
-const Button = styled(NavLink)`
-  background-color: #30b94e;
-  color: #ffffff;
-  font-weight: 700;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  font-size: 1em;
-  cursor: pointer;
-  &:hover {
-    background-color: #15241c; 
-  }
-  @media (max-width: 900px) {
-    
-  }
-`;
 
 const MainDashboard = ({ name }) => {
+  const [monthlyRevenue, setMonthlyRevenue] = useState(0);
+  const [monthlyExpense, setMonthlyExpense] = useState(0);
+  const currentUser = auth.currentUser;
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        if (currentUser) {
+          const userId = currentUser.uid;
+          const currentDate = new Date();
+          const currentMonth = currentDate.getMonth() + 1; 
+
+          
+          const revenueQuery = query(collection(db, 'launches'),
+            where('userId', '==', userId),
+            where('type', '==', 'income')
+          );
+          const revenueSnapshot = await getDocs(revenueQuery);
+          let totalRevenue = 0;
+          revenueSnapshot.forEach(doc => {
+            const data = doc.data();
+            const launchDate = new Date(data.date); 
+            if (launchDate.getMonth() + 1 === currentMonth) {
+              totalRevenue += parseFloat(data.amount);
+            }
+          });
+          setMonthlyRevenue(totalRevenue);
+
+          
+          const expenseQuery = query(collection(db, 'launches'),
+            where('userId', '==', userId),
+            where('type', '==', 'expense')
+          );
+          const expenseSnapshot = await getDocs(expenseQuery);
+          let totalExpense = 0;
+          expenseSnapshot.forEach(doc => {
+            const data = doc.data();
+            const launchDate = new Date(data.date); 
+            if (launchDate.getMonth() + 1 === currentMonth) {
+              totalExpense += parseFloat(data.amount);
+            }
+          });
+          setMonthlyExpense(totalExpense);
+        } else {
+          console.log('Usuário não autenticado.');
+        }
+      } catch (error) {
+        console.error('Erro ao buscar os dados do usuário:', error);
+      }
+    };
+
+    fetchUserData();
+  }, [currentUser]);
+
   const now = new Date();
   const hour = now.getHours();
   let greeting = '';
@@ -110,49 +148,40 @@ const MainDashboard = ({ name }) => {
     greeting = 'Boa tarde';
   } else if (hour >= 0 && hour < 5) {
     greeting = 'Boa Madrugada';
-  }
-  else {
+  } else {
     greeting = 'Boa noite';
   }
 
   return (
     <Container>
-    
-
       <Greeting>{greeting}, <UserName>{name}</UserName>!</Greeting>
       <SectionInfo>
         <SectionInfoGroup>
           <SectionTitle>Receita mensal</SectionTitle>
           <Section>
-            <p>R$ 0,00</p>
+            <p>R$ {monthlyRevenue.toFixed(2)}</p>
           </Section>
         </SectionInfoGroup>
         <SectionInfoGroup>
           <SectionTitle>Despesa mensal</SectionTitle>
           <Section>
-            <p>R$ 0,00</p>
+            <p>R$ {monthlyExpense.toFixed(2)}</p>
           </Section>
         </SectionInfoGroup>
-
-
-        <Section>
-          <Button to='/reports'>Ver relatórios</Button>
-        </Section>
       </SectionInfo>
       <SectionTitle>Acesso rápido</SectionTitle>
       <QuickAccess>
-        <Action>
-          <Icon><FontAwesomeIcon icon={faDollarSign} color='green' /></Icon>
-          <Title>Receita</Title>
+        <Action to='/launches'>
+            <Icon><FontAwesomeIcon icon={faDollarSign} color='green' /></Icon>
+            <Title>Lançamentos</Title>
         </Action>
-        <Action>
+        <Action to='/reports'>
           <Icon><FontAwesomeIcon icon={faMoneyBillAlt} color='red' /></Icon>
-          <Title>Despesa</Title>
+          <Title>Relatórios</Title>
         </Action>
-
       </QuickAccess>
     </Container>
   );
 };
 
-export default MainDashboard
+export default MainDashboard;

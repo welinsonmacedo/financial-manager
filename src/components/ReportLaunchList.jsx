@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { getFirestore, collection, getDocs, where, query, deleteDoc, doc, updateDoc } from 'firebase/firestore';
+import { getFirestore, collection, getDocs, where, query } from 'firebase/firestore';
 import { app, auth } from '../config/firebaseConfig';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import CurrencyFormatter from './common/CurrencyFormatter';
 import DateFormatter from './common/DateFormatter';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
+
 const db = getFirestore(app);
 
 const Container = styled.div`
@@ -57,7 +56,9 @@ const SectionTitle = styled.p`
 
 const LaunchList = () => {
   const [launches, setLaunches] = useState([]);
-  const [selectedType, setSelectedType] = useState('');
+  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
+  const [totalIncome, setTotalIncome] = useState(0);
+  const [totalExpense, setTotalExpense] = useState(0);
   const [user] = useAuthState(auth);
   const currentUser = auth.currentUser;
 
@@ -80,45 +81,41 @@ const LaunchList = () => {
     fetchLaunches();
   }, [currentUser]);
 
-  const handleDelete = async (launchId) => {
-    if (window.confirm('Tem certeza que deseja apagar este lançamento?')) {
-      try {
-        await deleteDoc(doc(db, 'launches', launchId));
-        setLaunches(prevLaunches => prevLaunches.filter(launch => launch.id !== launchId));
-      } catch (error) {
-        console.error('Erro ao apagar lançamento:', error);
-      }
-    }
-  };
+  useEffect(() => {
+    const calculateTotals = () => {
+      let totalIncome = 0;
+      let totalExpense = 0;
 
-  const handlePaymentToggle = async (launchId, paymentStatus) => {
-    try {
-      await updateDoc(doc(db, 'launches', launchId), {
-        payment: !paymentStatus
+      launches.forEach(launch => {
+        if (new Date(launch.date).getMonth() + 1 === selectedMonth) {
+          if (launch.type === 'income') {
+            totalIncome += parseFloat(launch.amount);
+          } else {
+            totalExpense += parseFloat(launch.amount);
+          }
+        }
       });
-      setLaunches(prevLaunches =>
-        prevLaunches.map(launch =>
-          launch.id === launchId ? { ...launch, payment: !paymentStatus } : launch
-        )
-      );
-    } catch (error) {
-      console.error('Erro ao atualizar status de pagamento:', error);
-    }
-  };
 
-  const handleChangeType = (e) => {
-    setSelectedType(e.target.value);
+      setTotalIncome(totalIncome);
+      setTotalExpense(totalExpense);
+    };
+
+    calculateTotals();
+  }, [launches, selectedMonth]);
+
+  const handleChangeMonth = (e) => {
+    setSelectedMonth(parseInt(e.target.value));
   };
 
   return (
     <Container>
       <SectionTitle>Lançamentos</SectionTitle>
       <div>
-        <Label htmlFor="type">Tipo:</Label>
-        <Select id="type" value={selectedType} onChange={handleChangeType}>
-          <option value="">Todos</option>
-          <option value="expense">Despesa</option>
-          <option value="income">Receita</option>
+        <Label htmlFor="month">Mês:</Label>
+        <Select id="month" value={selectedMonth} onChange={handleChangeMonth}>
+          {Array.from({ length: 12 }, (_, i) => i + 1).map(month => (
+            <option key={month} value={month}>{month}</option>
+          ))}
         </Select>
       </div>
       <StyledTable>
@@ -128,35 +125,37 @@ const LaunchList = () => {
             <th>Categoria</th>
             <th>Valor</th>
             <th>Data</th>
-            <th>Pago</th>
-            <th>Apagar</th>
           </tr>
         </TableHead>
         <tbody>
           {launches
-            .filter(launch => !selectedType || launch.type === selectedType)
+            .filter(launch => new Date(launch.date).getMonth() + 1 === selectedMonth)
             .map((launch) => (
               <TableRow key={launch.id}>
                 <TableCell>{launch.type === 'expense' ? 'Despesa' : 'Receita'}</TableCell>
                 <TableCell>{launch.category}</TableCell>
                 <TableCell><CurrencyFormatter value={launch.amount} /></TableCell>
                 <TableCell><DateFormatter date={launch.date} /></TableCell>
-                <TableCell>
-                  {launch.type === 'expense' ? (
-                    <button onClick={() => handlePaymentToggle(launch.id, launch.payment)}>
-                      {launch.payment ? 'Pago' : 'Pagar'}
-                    </button>
-                  ) : (
-                    <span>{launch.payment ? 'Pago' : 'Não aplicável'}</span>
-                  )}
-                </TableCell>
-                <TableCell>
-                  <button onClick={() => handleDelete(launch.id)}>
-                    <FontAwesomeIcon icon={faTrashCan} color='red' cursor='pointer' border='none' />
-                  </button>
-                </TableCell>
               </TableRow>
             ))}
+          <TableRow>
+            <TableCell><strong>Total Receita</strong></TableCell>
+            <TableCell></TableCell>
+            <TableCell><strong><CurrencyFormatter value={totalIncome} /></strong></TableCell>
+            <TableCell></TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell><strong>Total Despesa</strong></TableCell>
+            <TableCell></TableCell>
+            <TableCell><strong><CurrencyFormatter value={totalExpense} /></strong></TableCell>
+            <TableCell></TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell><strong>Saldo Final</strong></TableCell>
+            <TableCell></TableCell>
+            <TableCell><strong><CurrencyFormatter value={totalIncome - totalExpense} /></strong></TableCell>
+            <TableCell></TableCell>
+          </TableRow>
         </tbody>
       </StyledTable>
     </Container>

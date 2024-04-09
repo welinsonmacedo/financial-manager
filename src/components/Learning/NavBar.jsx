@@ -137,7 +137,7 @@ const NavBar = () => {
         if (element) {
             element.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
-        setIsOpen(false); // Fechar o menu ao clicar em um item
+        setIsOpen(false); 
     };
 
     return (

@@ -89,7 +89,7 @@ const LaunchForm = () => {
   const [amount, setAmount] = useState('');
   const [date, setDate] = useState('');
   const [categories, setCategories] = useState([]);
-  const [type, setType] = useState('expense'); // Definindo o tipo inicial como despesa
+  const [type, setType] = useState('expense'); 
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -113,8 +113,12 @@ const LaunchForm = () => {
     e.preventDefault();
     const currentUser = auth.currentUser;
     if (category && amount && date && currentUser) {
+      let payment = null; 
+      if (type === 'expense') {
+        payment = false; 
+      }
       try {
-        const newLaunch = { type, category, amount, date, userId: currentUser.uid };
+        const newLaunch = { type, category, amount, date,payment, userId: currentUser.uid };
         const launchesCollection = collection(db, 'launches');
         await addDoc(launchesCollection, newLaunch);
         setCategory('');
@@ -169,7 +173,7 @@ const LaunchForm = () => {
           </Form>
         </FormContainer>
         <LaunchList />
-        <BalanceSummary />
+       
       </Container>
     </>
   );

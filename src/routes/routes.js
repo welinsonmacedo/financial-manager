@@ -8,6 +8,7 @@ import LaunchesComponent from '../components/LaunchesComponent';
 import ConfigComponent from '../components/ConfigComponent';
 import CreateCategory from '../components/CreateCategory';
 import TermsOfUse from '../components/PrivacyAndAccessibility/TermsOfUse';
+import ReportComponent from '../components/ReportComponent';
 
 
 const RoutesApp = () => {
@@ -23,6 +24,7 @@ const RoutesApp = () => {
         <Route exact path="/categoryexpense" element={<CreateCategory type="expense" /> } />
         <Route exact path="/categoryincome" element={<CreateCategory type="income" />} />
         <Route exact path="/termsofuse" element={<TermsOfUse/>} />
+        <Route exact path="/reports" element={<ReportComponent/>} />
        
       </Routes>
     </Router>

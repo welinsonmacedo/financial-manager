@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCoffee, faCar, faPlane, faUtensils, faDog } from '@fortawesome/free-solid-svg-icons';
-import { getAuth } from 'firebase/auth'; // Importe a função necessária do Firebase Authentication
+import { getAuth } from 'firebase/auth'; 
 import { getFirestore, collection, addDoc } from 'firebase/firestore';
 import { app } from '../config/firebaseConfig';
 import NavBar from './NavBar';
 
 const db = getFirestore(app);
-const auth = getAuth(app); // Obtenha a instância de autenticação do Firebase
-const user = auth.currentUser; // Obtenha o usuário atualmente autenticado (pode ser nulo se o usuário não estiver autenticado)
+const auth = getAuth(app); 
+const user = auth.currentUser; 
 
 const Container = styled.div`
   display: flex;
@@ -100,7 +100,7 @@ const CreateCategory = ({ type }) => {
     const [color, setColor] = useState('');
     const [icon, setIcon] = useState('');
 
-    // Lista de ícones FontAwesome disponíveis para escolha
+    
     const iconOptions = [
         { name: 'faCoffee', icon: faCoffee },
         { name: 'faCar', icon: faCar },
@@ -112,7 +112,7 @@ const CreateCategory = ({ type }) => {
     const handleCreateCategory = async (e) => {
       e.preventDefault();
       try {
-        // Verificar se o usuário está autenticado antes de acessar suas propriedades
+        
         if (user) {
           const categoryData = {
             name,
@@ -128,7 +128,7 @@ const CreateCategory = ({ type }) => {
           setIcon('');
           alert('Categoria criada com sucesso!');
         } else {
-          // Tratar o caso em que o usuário não está autenticado
+          
           console.error('Usuário não autenticado');
           alert('Usuário não autenticado. Por favor, faça login para criar uma categoria.');
         }

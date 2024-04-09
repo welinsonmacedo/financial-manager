@@ -139,7 +139,8 @@ const NavBar = () => {
     if (element) {
       element.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
-    setIsOpen(false); // Fechar o menu ao clicar em um item
+    setIsOpen(false)
+    
   };
 
   return (
@@ -155,7 +156,7 @@ const NavBar = () => {
       <Menu isOpen={isOpen}>
         <MenuItem to="/home">Visão Geral</MenuItem>
         <MenuItem to="/launches">Lançamentos</MenuItem>
-        <MenuItem onClick={() => scrollToSection('pricing')}>Relatórios</MenuItem>
+        <MenuItem to="/reports">Relatórios</MenuItem>
         <MenuItem onClick={() => scrollToSection('pricing')}>Limite de Gastos</MenuItem>
         <MenuItem onClick={toggleConfigMenu}>
           <FontAwesomeIcon icon={faCog} />
@@ -168,7 +169,7 @@ const NavBar = () => {
             <DropdownMenuItem to="/config">Cartões de Crédito</DropdownMenuItem>
             <DropdownMenuItem to="/config">Preferências</DropdownMenuItem>
             <DropdownMenuItem to="/config">Meu Plano</DropdownMenuItem>
-            {/* Adicione mais itens de menu conforme necessário */}
+           
           </DropdownMenu>
         </MenuItem>
         <MenuItem onClick={() => scrollToSection('pricing')}>

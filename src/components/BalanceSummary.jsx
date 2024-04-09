@@ -7,7 +7,7 @@ const db = getFirestore(app);
 
 const Container = styled.div`
   max-width: 600px;
-  max-height: 100px;
+  max-height: 200px;
   margin: 20px auto;
   padding: 20px;
   background-color: ${({ color }) => color};
@@ -37,16 +37,16 @@ const BalanceValue = styled.span`
 const BalanceSummary = () => {
   const [totalIncome, setTotalIncome] = useState(0);
   const [totalExpense, setTotalExpense] = useState(0);
-  const [balanceColor, setBalanceColor] = useState('#81f891'); // Cor padrão verde
-  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1); // Mês atual como valor padrão
+  const [balanceColor, setBalanceColor] = useState('#81f891'); 
+  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1); 
 
   useEffect(() => {
     const currentUser = auth.currentUser;
-    if (!currentUser) return; // Sai da função se o usuário não estiver logado
+    if (!currentUser) return; 
 
     const fetchMonthlyData = async () => {
       try {
-        // Obtém o ano e mês selecionados
+        
         const currentYear = new Date().getFullYear();
         const formattedSelectedMonth = selectedMonth.toString().padStart(2, '0');
 
@@ -67,7 +67,7 @@ const BalanceSummary = () => {
 
         let incomeTotal = 0;
         incomeSnapshot.forEach(doc => {
-          incomeTotal += parseFloat(doc.data().amount); // Converte para número antes de somar
+          incomeTotal += parseFloat(doc.data().amount); 
         });
         console.log('Total de receitas:', incomeTotal);
         setTotalIncome(incomeTotal);
@@ -85,7 +85,7 @@ const BalanceSummary = () => {
 
         let expenseTotal = 0;
         expenseSnapshot.forEach(doc => {
-          expenseTotal += parseFloat(doc.data().amount); // Converte para número antes de somar
+          expenseTotal += parseFloat(doc.data().amount); 
         });
         console.log('Total de despesas:', expenseTotal);
         setTotalExpense(expenseTotal);
@@ -95,11 +95,11 @@ const BalanceSummary = () => {
 
         let color;
         if (expenseTotal <= incomeTotal * 0.5) {
-          color = '#81f891'; // Verde se o gasto for até 50% do saldo total
+          color = '#81f891'; 
         } else if (expenseTotal <= incomeTotal * 0.8) {
-          color = '#ffd700'; // Laranja se o gasto for até 80% do saldo total
+          color = '#ffd700'; 
         } else {
-          color = '#ff6347'; // Vermelho se o gasto for acima de 80% do saldo total
+          color = '#ff6347'; 
         }
         setBalanceColor(color);
       } catch (error) {
@@ -120,16 +120,16 @@ const BalanceSummary = () => {
         ))}
       </select>
       <BalanceContainer>
-        <BalanceLabel>Receita Total do Mês:</BalanceLabel>
-        <BalanceValue>R$:{totalIncome.toFixed(2)} BRL</BalanceValue>
+        <BalanceLabel>Receita Mês:</BalanceLabel>
+        <BalanceValue>R$:{totalIncome.toFixed(2)} </BalanceValue>
       </BalanceContainer>
       <BalanceContainer>
-        <BalanceLabel>Despesa do Mês:</BalanceLabel>
-        <BalanceValue>R$:{totalExpense.toFixed(2)} BRL</BalanceValue>
+        <BalanceLabel>Despesa Mês:</BalanceLabel>
+        <BalanceValue>R$:{totalExpense.toFixed(2)} </BalanceValue>
       </BalanceContainer>
       <BalanceContainer>
         <BalanceLabel>Saldo Atual:</BalanceLabel>
-        <BalanceValue>R$:{(totalIncome - totalExpense).toFixed(2)} BRL</BalanceValue>
+        <BalanceValue>R$:{(totalIncome - totalExpense).toFixed(2)} </BalanceValue>
       </BalanceContainer>
     </Container>
   );
