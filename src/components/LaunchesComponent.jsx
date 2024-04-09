@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { getFirestore, collection, getDocs, addDoc, where, query } from 'firebase/firestore';
+import { getFirestore, collection, addDoc, query, where, getDocs } from 'firebase/firestore';
 import { app, auth } from '../config/firebaseConfig';
 import LaunchList from './LaunchList';
 import BalanceSummary from './BalanceSummary';
@@ -89,51 +89,46 @@ const LaunchForm = () => {
   const [amount, setAmount] = useState('');
   const [date, setDate] = useState('');
   const [categories, setCategories] = useState([]);
+  const [type, setType] = useState('expense'); // Definindo o tipo inicial como despesa
 
   useEffect(() => {
     const fetchCategories = async () => {
       try {
         const currentUser = auth.currentUser;
         if (currentUser) {
-          const expenseCategoriesCollection = collection(db, 'expenseCategories');
-          const incomeCategoriesCollection = collection(db, 'incomeCategories');
-          const expenseCategoriesQuery = query(expenseCategoriesCollection, where('userId', '==', currentUser.uid));
-          const incomeCategoriesQuery = query(incomeCategoriesCollection, where('userId', '==', currentUser.uid));
-          const [expenseCategoriesSnapshot, incomeCategoriesSnapshot] = await Promise.all([
-            getDocs(expenseCategoriesQuery),
-            getDocs(incomeCategoriesQuery)
-          ]);
-          const expenseData = expenseCategoriesSnapshot.docs.map(doc => doc.data());
-          const incomeData = incomeCategoriesSnapshot.docs.map(doc => doc.data());
-          setCategories([...expenseData, ...incomeData]);
+          const categoriesCollection = type === 'expense' ? 'expenseCategories' : 'incomeCategories';
+          const categoriesQuery = query(collection(db, categoriesCollection), where('userId', '==', currentUser.uid));
+          const categoriesSnapshot = await getDocs(categoriesQuery);
+          const data = categoriesSnapshot.docs.map(doc => doc.data());
+          setCategories(data);
         }
       } catch (error) {
         console.error('Erro ao buscar categorias:', error);
       }
     };
     fetchCategories();
-  }, []);
+  }, [type]);
 
- const handleSubmit = async (e) => {
-  e.preventDefault();
-  const currentUser = auth.currentUser;
-  if (category.name && category.name.trim() !== '' && amount && amount.trim() !== '' && date && date.trim() !== '' && currentUser) {
-    try {
-      const newLaunch = { category:category.name, amount, date, userId: currentUser.uid };
-      const launchesCollection = collection(db, 'launches');
-      await addDoc(launchesCollection, newLaunch);
-      setCategory('');
-      setAmount('');
-      setDate('');
-      alert('Lançamento adicionado com sucesso!');
-    } catch (error) {
-      console.error('Erro ao adicionar lançamento:', error);
-      alert('Erro ao adicionar lançamento. Consulte o console para mais detalhes.');
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const currentUser = auth.currentUser;
+    if (category && amount && date && currentUser) {
+      try {
+        const newLaunch = { type, category, amount, date, userId: currentUser.uid };
+        const launchesCollection = collection(db, 'launches');
+        await addDoc(launchesCollection, newLaunch);
+        setCategory('');
+        setAmount('');
+        setDate('');
+        alert('Lançamento adicionado com sucesso!');
+      } catch (error) {
+        console.error('Erro ao adicionar lançamento:', error);
+        alert('Erro ao adicionar lançamento. Consulte o console para mais detalhes.');
+      }
+    } else {
+      alert('Por favor, preencha todos os campos corretamente.');
     }
-  } else {
-    alert('Por favor, preencha todos os campos corretamente.');
-  }
-};
+  };
 
   return (
     <>
@@ -143,13 +138,20 @@ const LaunchForm = () => {
           <SectionTitle>Lançar Novo</SectionTitle>
           <Form onSubmit={handleSubmit}>
             <FormGroup>
+              <Label>Tipo:</Label>
+              <Select value={type} onChange={(e) => setType(e.target.value)}>
+                <option value="expense">Despesa</option>
+                <option value="income">Receita</option>
+              </Select>
+            </FormGroup>
+            <FormGroup>
               <Label>Categoria:</Label>
               <Select value={category} onChange={(e) => setCategory(e.target.value)}>
                 <option value="">Selecione a categoria</option>
                 {categories.map((category, index) => (
-                  <option key={index} value={category}>
+                  <option key={index} value={category.name}>
                     <span style={{ color: category.color }}>
-                      <FontAwesomeIcon icon={category.icon} /> {category.name}
+                      <FontAwesomeIcon icon={category} /> {category.name}
                     </span>
                   </option>
                 ))}

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { getFirestore, collection, getDocs, where, query } from 'firebase/firestore';
+import { getFirestore, collection, getDocs, where, query, deleteDoc, doc } from 'firebase/firestore';
 import { app, auth } from '../config/firebaseConfig';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import CurrencyFormatter from './common/CurrencyFormatter';
@@ -56,34 +56,9 @@ const SectionTitle = styled.p`
 
 const LaunchList = () => {
   const [launches, setLaunches] = useState([]);
-  const [filteredLaunches, setFilteredLaunches] = useState([]);
   const [selectedType, setSelectedType] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('');
   const [user] = useAuthState(auth);
   const currentUser = auth.currentUser;
-  const [incomeCategories, setIncomeCategories] = useState([]);
-  const [expenseCategories, setExpenseCategories] = useState([]);
-
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        if (currentUser) {
-          const incomeCategoriesQuery = query(collection(db, 'incomeCategories'), where('userId', '==', currentUser.uid));
-          const expenseCategoriesQuery = query(collection(db, 'expenseCategories'), where('userId', '==', currentUser.uid));
-          const incomeCategoriesSnapshot = await getDocs(incomeCategoriesQuery);
-          const expenseCategoriesSnapshot = await getDocs(expenseCategoriesQuery);
-          const incomeCategoriesData = incomeCategoriesSnapshot.docs.map(doc => doc.data());
-          const expenseCategoriesData = expenseCategoriesSnapshot.docs.map(doc => doc.data());
-          setIncomeCategories(incomeCategoriesData);
-          setExpenseCategories(expenseCategoriesData);
-        }
-      } catch (error) {
-        console.error('Erro ao buscar categorias:', error);
-      }
-    };
-  
-    fetchCategories();
-  }, [currentUser]);
 
   useEffect(() => {
     const fetchLaunches = async () => {
@@ -91,9 +66,8 @@ const LaunchList = () => {
         if (currentUser) {
           const launchesQuery = query(collection(db, 'launches'), where('userId', '==', currentUser.uid));
           const launchesSnapshot = await getDocs(launchesQuery);
-          const launchesData = launchesSnapshot.docs.map(doc => doc.data());
+          const launchesData = launchesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
           setLaunches(launchesData);
-          setFilteredLaunches(launchesData);
         } else {
           console.log('Usuário não autenticado.');
         }
@@ -105,31 +79,19 @@ const LaunchList = () => {
     fetchLaunches();
   }, [currentUser]);
 
-  const handleFilter = () => {
-    let filtered = launches;
-  
-    // Filtrar por tipo
-    if (selectedType) {
-      filtered = filtered.filter(launch => launch.type === selectedType);
+  const handleDelete = async (launchId) => {
+    if (window.confirm('Tem certeza que deseja apagar este lançamento?')) {
+      try {
+        await deleteDoc(doc(db, 'launches', launchId));
+        setLaunches(prevLaunches => prevLaunches.filter(launch => launch.id !== launchId));
+      } catch (error) {
+        console.error('Erro ao apagar lançamento:', error);
+      }
     }
-  
-    // Filtrar por categoria, apenas se uma categoria for selecionada
-    if (selectedCategory) {
-      filtered = filtered.filter(launch => launch.category === selectedCategory);
-    }
-  
-    setFilteredLaunches(filtered);
   };
-  
 
   const handleChangeType = (e) => {
     setSelectedType(e.target.value);
-    handleFilter();
-  };
-
-  const handleChangeCategory = (e) => {
-    setSelectedCategory(e.target.value);
-    handleFilter();
   };
 
   return (
@@ -139,40 +101,32 @@ const LaunchList = () => {
         <Label htmlFor="type">Tipo:</Label>
         <Select id="type" value={selectedType} onChange={handleChangeType}>
           <option value="">Todos</option>
-          {incomeCategories.map(category => (
-            <option key={category.id} value={category.name}>{category.name}</option>
-          ))}
-        </Select>
-      </div>
-      <div>
-        <Label htmlFor="category">Categoria:</Label>
-        <Select id="category" value={selectedCategory} onChange={handleChangeCategory}>
-          <option value="">Todas</option>
-          {expenseCategories.map(category => (
-            <option key={category.id} value={category.name}>{category.name}</option>
-          ))}
+          <option value="expense">Despesa</option>
+          <option value="income">Receita</option>
         </Select>
       </div>
       <StyledTable>
         <TableHead>
-          <TableRow>
-            <TableCell>Tipo</TableCell>
-            <TableCell>Categoria</TableCell>
-            <TableCell>Valor</TableCell>
-            <TableCell>Data</TableCell>
-          </TableRow>
+          <tr>
+            <th>Tipo</th>
+            <th>Categoria</th>
+            <th>Valor</th>
+            <th>Data</th>
+            <th>Apagar</th>
+          </tr>
         </TableHead>
         <tbody>
-          {filteredLaunches.map((launch, index) => (
-            <TableRow key={index}>
-              <TableCell>{launch.type}</TableCell>
-              <TableCell>{launch.category}</TableCell>
-              <TableCell><CurrencyFormatter value={launch.amount} ></CurrencyFormatter></TableCell>
-              <TableCell><DateFormatter date={launch.date}></DateFormatter></TableCell>
-              
-              
-            </TableRow>
-          ))}
+          {launches
+            .filter(launch => !selectedType || launch.type === selectedType)
+            .map((launch) => (
+              <TableRow key={launch.id}>
+                <TableCell>{launch.type === 'expense' ? 'Despesa' : 'Receita'}</TableCell>
+                <TableCell>{launch.category}</TableCell>
+                <TableCell><CurrencyFormatter value={launch.amount} /></TableCell>
+                <TableCell><DateFormatter date={launch.date} /></TableCell>
+                <TableCell><button onClick={() => handleDelete(launch.id)}>Apagar</button></TableCell>
+              </TableRow>
+            ))}
         </tbody>
       </StyledTable>
     </Container>

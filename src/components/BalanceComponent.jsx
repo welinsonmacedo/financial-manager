@@ -1,7 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash, faCog } from '@fortawesome/free-solid-svg-icons';
+import { getFirestore, collection, getDocs, where ,query} from 'firebase/firestore';
+import { app, auth } from '../config/firebaseConfig';
+
+const db = getFirestore(app);
 
 const Container = styled.div`
   text-align: center;
@@ -49,6 +53,33 @@ const Icon = styled.span`
 
 const BalanceComponent = () => {
   const [showBalance, setShowBalance] = useState(true);
+  const [totalIncome, setTotalIncome] = useState(0);
+  const currentUser = auth.currentUser;
+
+  useEffect(() => {
+    const fetchBalance = async () => {
+      try {
+        if (currentUser) {
+          const launchesQuery = query(collection(db, 'launches'), where('userId', '==', currentUser.uid));
+          const launchesSnapshot = await getDocs(launchesQuery);
+          let total = 0;
+          launchesSnapshot.forEach(doc => {
+            const data = doc.data();
+            if (data.type === 'income') {
+              total += parseFloat(data.amount);
+            }
+          });
+          setTotalIncome(total);
+        } else {
+          console.log('Usuário não autenticado.');
+        }
+      } catch (error) {
+        console.error('Erro ao buscar o saldo:', error);
+      }
+    };
+
+    fetchBalance();
+  }, [currentUser]);
 
   const toggleBalanceVisibility = () => {
     setShowBalance(!showBalance);
@@ -58,7 +89,7 @@ const BalanceComponent = () => {
     <Container>
       <Title>Saldo Geral</Title>
       <Balance>
-        {showBalance ? 'R$ 1000,00' : '*****'}
+        {showBalance ? totalIncome.toFixed(2) : '*****'}
         <Icon onClick={toggleBalanceVisibility}>
           <FontAwesomeIcon icon={showBalance ? faEyeSlash : faEye} />
         </Icon>

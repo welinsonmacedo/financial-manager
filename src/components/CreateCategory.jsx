@@ -110,26 +110,32 @@ const CreateCategory = ({ type }) => {
     ];
 
     const handleCreateCategory = async (e) => {
-        e.preventDefault();
-        try {
-            const categoryData = {
-                name,
-                color,
-                icon,
-                type,
-                userId:  user.uid 
-            };
-            const categoriesCollection = collection(db, type === 'expense' ? 'expenseCategories' : 'incomeCategories');
-            await addDoc(categoriesCollection, categoryData);
-            setName('');
-            setColor('');
-            setIcon('');
-            alert('Categoria criada com sucesso!');
-        } catch (error) {
-            console.error('Erro ao criar categoria:', error);
+      e.preventDefault();
+      try {
+        // Verificar se o usuário está autenticado antes de acessar suas propriedades
+        if (user) {
+          const categoryData = {
+            name,
+            color,
+            icon,
+            type,
+            userId: user.uid
+          };
+          const categoriesCollection = collection(db, type === 'expense' ? 'expenseCategories' : 'incomeCategories');
+          await addDoc(categoriesCollection, categoryData);
+          setName('');
+          setColor('');
+          setIcon('');
+          alert('Categoria criada com sucesso!');
+        } else {
+          // Tratar o caso em que o usuário não está autenticado
+          console.error('Usuário não autenticado');
+          alert('Usuário não autenticado. Por favor, faça login para criar uma categoria.');
         }
+      } catch (error) {
+        console.error('Erro ao criar categoria:', error);
+      }
     };
-
     return (
         <Container>
           <NavBar/>
