@@ -15,10 +15,7 @@ const Container = styled.div`
   width: 100%;
 `;
 
-const StyledTable = styled.table`
-  width: 100%;
-  border-collapse: collapse;
-`;
+
 
 const TableHead = styled.thead`
   background-color: #30b94e;
@@ -53,6 +50,43 @@ const SectionTitle = styled.p`
   margin-top: 20px;
   font-size: 1.5em;
 `;
+const StyledTable = styled.table`
+ width: 100%;
+  border-collapse: collapse;
+
+  @media (max-width: 768px) {
+  
+    overflow-x: auto;
+    display: block;
+    width: 100%;
+
+   
+    thead,
+    tbody,
+    th,
+    td,
+    tr {
+      display: block;
+    }
+    tbody tr {
+      margin-bottom: 10px;
+    }
+    th,
+    td {
+      text-align: left;
+      border-bottom: none;
+      padding: 8px;
+    }
+    th {
+      background-color: #30b94e;
+      color: #fff;
+      display: none;
+    }
+    td {
+      border-bottom: 1px solid #ddd;
+    }
+  }
+`;
 
 const LaunchList = () => {
   const [launches, setLaunches] = useState([]);
@@ -77,7 +111,7 @@ const LaunchList = () => {
         console.error('Erro ao buscar lançamentos:', error);
       }
     };
-  
+
     fetchLaunches();
   }, [currentUser]);
 
@@ -85,7 +119,7 @@ const LaunchList = () => {
     const calculateTotals = () => {
       let totalIncome = 0;
       let totalExpense = 0;
-  
+
       launches.forEach(launch => {
         const launchDate = new Date(launch.dateRegister);
         if (launchDate.getMonth() + 1 === selectedMonth) {
@@ -96,14 +130,14 @@ const LaunchList = () => {
           }
         }
       });
-  
+
       setTotalIncome(totalIncome);
       setTotalExpense(totalExpense);
     };
-  
+
     calculateTotals();
   }, [launches, selectedMonth]);
-  
+
   const handleChangeMonth = (e) => {
     setSelectedMonth(parseInt(e.target.value));
   };
@@ -124,7 +158,7 @@ const LaunchList = () => {
           ))}
         </Select>
       </div>
-      <StyledTable>
+      <StyledTable className="responsive-table">
         <TableHead>
           <tr>
             <th>Tipo</th>
@@ -137,7 +171,9 @@ const LaunchList = () => {
         <tbody>
           {filteredLaunches.map((launch) => (
             <TableRow key={launch.id}>
-              <TableCell>{launch.type === 'income' ? 'Receita' : 'Despesa'}</TableCell>
+              <TableCell style={launch.type === 'income' ? { backgroundColor: '#55ff6f', color: '#fff' } : { backgroundColor: '#ec9d41', color: '#fff' }}>
+                {launch.type === 'income' ? 'Receita' : 'Despesa'}
+              </TableCell>
               <TableCell>{launch.category}</TableCell>
               <TableCell><CurrencyFormatter value={launch.amount} /></TableCell>
               <TableCell><DateFormatter date={launch.dateRegister} /></TableCell>

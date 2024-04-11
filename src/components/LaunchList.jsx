@@ -7,6 +7,8 @@ import CurrencyFormatter from './common/CurrencyFormatter';
 import DateFormatter from './common/DateFormatter';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashAlt, faUndo, faCheck } from '@fortawesome/free-solid-svg-icons';
+import CustomAlert from './common/CustomAlert';
+
 
 const db = getFirestore(app);
 
@@ -18,8 +20,41 @@ const Container = styled.div`
 `;
 
 const StyledTable = styled.table`
-  width: 100%;
+ width: 100%;
   border-collapse: collapse;
+
+  @media (max-width: 768px) {
+  
+    overflow-x: auto;
+    display: block;
+    width: 100%;
+
+   
+    thead,
+    tbody,
+    th,
+    td,
+    tr {
+      display: block;
+    }
+    tbody tr {
+      margin-bottom: 10px;
+    }
+    th,
+    td {
+      text-align: left;
+      border-bottom: none;
+      padding: 8px;
+    }
+    th {
+      background-color: #30b94e;
+      color: #fff;
+      display: none;
+    }
+    td {
+      border-bottom: 1px solid #ddd;
+    }
+  }
 `;
 
 const TableHead = styled.thead`
@@ -61,6 +96,9 @@ const LaunchList = () => {
   const [selectedType, setSelectedType] = useState('');
   const [user] = useAuthState(auth);
   const currentUser = auth.currentUser;
+  const [alertType, setAlertType] = useState('');
+  const [alertMessage, setAlertMessage] = useState('');
+  const [showAlert, setShowAlert] = useState(false); 
 
   useEffect(() => {
     const unsubscribe = onSnapshot(query(collection(db, 'launches'), where('userId', '==', currentUser.uid)), (snapshot) => {
@@ -73,8 +111,12 @@ const LaunchList = () => {
 
   const handleDelete = async (launchId) => {
     if (window.confirm('Tem certeza que deseja apagar este lançamento?')) {
+    
       try {
         await deleteDoc(doc(db, 'launches', launchId));
+        setAlertType('sucess');
+        setAlertMessage('Apagado com sucesso');
+        setShowAlert(true);
       } catch (error) {
         console.error('Erro ao apagar lançamento:', error);
       }
@@ -86,13 +128,28 @@ const LaunchList = () => {
       await updateDoc(doc(db, 'launches', launchId), {
         payment: !paymentStatus
       });
+  
+     
+      const alertMessage = paymentStatus ? 'Pagamento cancelado com sucesso!' : 'Despesa paga com sucesso!';
+      
+    
+      setAlertType('success');
+      setAlertMessage(alertMessage);
+      setShowAlert(true);
     } catch (error) {
+      setAlertType('error');
+      setAlertMessage('Erro ao pagar despesa, tente novamente!');
+      setShowAlert(true);
       console.error('Erro ao atualizar status de pagamento:', error);
     }
   };
+  
 
   const handleChangeType = (e) => {
     setSelectedType(e.target.value);
+  };
+  const handleCloseAlert = () => {
+    setShowAlert(false); 
   };
 
   return (
@@ -113,19 +170,30 @@ const LaunchList = () => {
             <th>Categoria</th>
             <th>Valor</th>
             <th>Vencimento</th>
-            <th>Pago</th>
+            <th>Situação</th>
             <th>Apagar</th>
           </tr>
         </TableHead>
         <tbody>
+        {showAlert && (
+              <CustomAlert
+                type={alertType}
+                message={alertMessage}
+                showAlert={showAlert}
+                onClose={handleCloseAlert}
+              />
+            )}
           {launches
             .filter(launch => !selectedType || launch.type === selectedType)
             .map((launch) => (
               <TableRow key={launch.id}>
-                <TableCell>{launch.type === 'expense' ? 'Despesa' : 'Receita'}</TableCell>
+                <TableCell style={launch.type === 'income' ? { backgroundColor: '#55ff6f', color: '#fff' } : { backgroundColor: '#ec9d41', color: '#fff' }}>
+                  {launch.type === 'income' ? 'Receita' : 'Despesa'}
+                </TableCell>
+
                 <TableCell>{launch.category}</TableCell>
                 <TableCell><CurrencyFormatter value={launch.amount} /></TableCell>
-                <TableCell>{launch.type === 'expense' ? <DateFormatter date={launch.date} /> : <span style={{ color: 'green' }}>-</span>}</TableCell>
+                <TableCell>{launch.type === 'expense' ? <DateFormatter date={launch.dateExpired} /> : <span style={{ color: 'green' }}>-</span>}</TableCell>
                 <TableCell>
                   {launch.type === 'expense' ? (
                     <button onClick={() => handlePaymentToggle(launch.id, launch.payment)} style={{ backgroundColor: launch.payment ? 'green' : 'red' }}>

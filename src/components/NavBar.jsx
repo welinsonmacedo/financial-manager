@@ -149,7 +149,7 @@ const NavBar = () => {
       <ToggleButton onClick={toggleMenu}>
         {isOpen ? <FontAwesomeIcon icon={faTimes} /> : <FontAwesomeIcon icon={faBars} />}
       </ToggleButton>
-      <UserStatus />
+  
       <Logo onClick={() => scrollToSection('home')}>
         <Img isOpen={isOpen} src="GERENTEFINANCEIRO.png" alt="logotipo " />
       </Logo>
@@ -178,7 +178,7 @@ const NavBar = () => {
         </MenuItem>
       </Menu>
 
-      {/* Renderize o componente de notificações */}
+      
       {isNotificationsOpen && <Notifications />}
     </Navbar>
   );

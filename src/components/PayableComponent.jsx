@@ -18,8 +18,41 @@ const Container = styled.div`
 `;
 
 const StyledTable = styled.table`
-  width: 100%;
+ width: 100%;
   border-collapse: collapse;
+
+  @media (max-width: 768px) {
+  
+    overflow-x: auto;
+    display: block;
+    width: 100%;
+
+   
+    thead,
+    tbody,
+    th,
+    td,
+    tr {
+      display: block;
+    }
+    tbody tr {
+      margin-bottom: 10px;
+    }
+    th,
+    td {
+      text-align: left;
+      border-bottom: none;
+      padding: 8px;
+    }
+    th {
+      background-color: #30b94e;
+      color: #fff;
+      display: none;
+    }
+    td {
+      border-bottom: 1px solid #ddd;
+    }
+  }
 `;
 
 const TableHead = styled.thead`
@@ -92,20 +125,7 @@ const PayableComponent = () => {
     }
   };
 
-  const handlePaymentToggle = async (launchId, paymentStatus) => {
-    try {
-      await updateDoc(doc(db, 'launches', launchId), {
-        payment: !paymentStatus
-      });
-      setLaunches(prevLaunches =>
-        prevLaunches.map(launch =>
-          launch.id === launchId ? { ...launch, payment: !paymentStatus } : launch
-        )
-      );
-    } catch (error) {
-      console.error('Erro ao atualizar status de pagamento:', error);
-    }
-  };
+ 
 
   const handleChangeMonth = (e) => {
     setSelectedMonth(parseInt(e.target.value));
@@ -130,7 +150,7 @@ const PayableComponent = () => {
             <th>Valor</th>
             <th>Data Lançamento</th> 
             <th>Vencimento</th>
-            <th>Pago</th>
+           
           </tr>
         </TableHead>
         <tbody>
@@ -138,20 +158,12 @@ const PayableComponent = () => {
             .filter(launch => launch.type === 'expense' && !launch.payment && new Date(launch.dateRegister).getMonth() + 1 === selectedMonth)
             .map((launch) => (
               <TableRow key={launch.id}>
-                <TableCell>Despesa</TableCell>
+                <TableCell style={{ backgroundColor: '#ec9d41',color:'#fff' }}>Despesa</TableCell>
                 <TableCell>{launch.category}</TableCell>
                 <TableCell><CurrencyFormatter value={launch.amount} /></TableCell>
                 <TableCell><DateFormatter date={launch.dateRegister} /></TableCell> 
                 <TableCell><DateFormatter date={launch.dateExpired} /></TableCell>
-                <TableCell>
-                  <button onClick={() => handlePaymentToggle(launch.id, launch.payment)}>
-                    {launch.payment ? (
-                      <FontAwesomeIcon icon={faCheckCircle} color='green' />
-                    ) : (
-                      <FontAwesomeIcon icon={faTimesCircle} color='red' />
-                    )}
-                  </button>
-                </TableCell>
+                
               </TableRow>
             ))}
         </tbody>

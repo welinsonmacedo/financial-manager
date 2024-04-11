@@ -7,6 +7,7 @@ import BalanceSummary from './BalanceSummary';
 import NavBar from './NavBar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCoffee, faCar, faPlane, faUtensils, faDog } from '@fortawesome/free-solid-svg-icons';
+import CustomAlert from './common/CustomAlert';
 
 const db = getFirestore(app);
 
@@ -90,6 +91,10 @@ const LaunchForm = () => {
   const [dateExpired, setDateExpired] = useState('');
   const [categories, setCategories] = useState([]);
   const [type, setType] = useState('expense');
+  const [alertType, setAlertType] = useState('');
+  const [alertMessage, setAlertMessage] = useState('');
+  const [showAlert, setShowAlert] = useState(false); 
+
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -125,14 +130,24 @@ const LaunchForm = () => {
         setCategory('');
         setAmount('');
         setDateExpired('');
-        alert('Lançamento adicionado com sucesso!');
+        setAlertType('success');
+        setAlertMessage('Lancamento realizado com sucesso!');
+        setShowAlert(true); 
       } catch (error) {
         console.error('Erro ao adicionar lançamento:', error);
-        alert('Erro ao adicionar lançamento. Consulte o console para mais detalhes.');
+        setAlertType('error');
+        setAlertMessage('Erro ao adicionar lancamento , verifique os dados!');
+        setShowAlert(true);
       }
     } else {
-      alert('Por favor, preencha todos os campos corretamente.');
+      setAlertType('error');
+      setAlertMessage('Por favor, preencha todos os campos corretamente.');
+      setShowAlert(true);
+      
     }
+  };
+  const handleCloseAlert = () => {
+    setShowAlert(false); 
   };
 
   return (
@@ -162,6 +177,14 @@ const LaunchForm = () => {
                 ))}
               </Select>
             </FormGroup>
+            {showAlert && (
+              <CustomAlert
+                type={alertType}
+                message={alertMessage}
+                showAlert={showAlert}
+                onClose={handleCloseAlert}
+              />
+            )}
             <FormGroup>
               <Label>Valor:</Label>
               <Input type="number" value={amount} onChange={(e) => setAmount(e.target.value)} />

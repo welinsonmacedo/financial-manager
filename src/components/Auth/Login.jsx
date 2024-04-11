@@ -7,12 +7,12 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import NavBar from './NavBar';
+import CustomAlert from '../common/CustomAlert'; 
 
 const Container = styled.div`
-
   padding-top: 100px;
- 
 `;
+
 const LoginContainer = styled.div`
   max-width: 400px;
   margin: 0 auto;
@@ -98,11 +98,17 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
-
+  const [alertType, setAlertType] = useState('');
+  const [alertMessage, setAlertMessage] = useState('');
+  const [showAlert, setShowAlert] = useState(false);
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(user => {
       if (user) {
-        navigate('/home');
+        setAlertType('success');
+        setAlertMessage('Login realizado com sucesso. Seja bem-vindo!');
+        setTimeout(() => {
+          navigate('/home');
+        }, 3000); 
       }
     });
 
@@ -113,9 +119,10 @@ const Login = () => {
     e.preventDefault();
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      alert('Login successful!');
     } catch (error) {
-      alert('Error logging in: ' + error.message);
+      setAlertType('error');
+      setAlertMessage('Erro ao fazer login:Senha ou email invalidos !');
+      setShowAlert(true);
     }
   };
 
@@ -127,19 +134,30 @@ const Login = () => {
   const handleSocialLogin = async (provider) => {
     try {
       await signInWithPopup(auth, provider);
-      alert('Login successful!');
     } catch (error) {
-      alert('Error logging in: ' + error.message);
+      setAlertType('error');
+      setAlertMessage('Erro ao fazer login: ' + error.message);
+      setShowAlert(true);
     }
   };
-
+  const handleCloseAlert = () => {
+    setShowAlert(false); 
+  };
   return (
     <>
-    <NavBar/>
+      <NavBar/>
       <Container>
+      {showAlert && (
+              <CustomAlert
+                type={alertType}
+                message={alertMessage}
+                showAlert={showAlert}
+                onClose={handleCloseAlert}
+              />)}
         <LoginContainer>
           <Logo src="GERENTEFINANCEIRO.png" alt="Logo" />
           <Title>Entre com sua conta</Title>
+  
           <Form onSubmit={handleLogin}>
             <FormGroup>
               <Label>Seu email:</Label>
@@ -158,7 +176,9 @@ const Login = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
+
             </FormGroup>
+            
             <Button type="submit">Entrar</Button>
           </Form>
           <ForgotPassword>
@@ -174,7 +194,6 @@ const Login = () => {
         </LoginContainer>
       </Container>
     </>
-
   );
 };
 

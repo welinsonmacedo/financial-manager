@@ -7,11 +7,12 @@ const db = getFirestore(app);
 
 const Container = styled.div`
   max-width: 600px;
-  margin: 20px auto;
+  margin: 0 auto;
   padding: 20px;
   background-color: ${({ color }) => color};
   border: 1px solid #ddd;
   border-radius: 5px;
+  padding-top: 100px;
 `;
 
 const Title = styled.h2`
