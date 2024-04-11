@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { getFirestore, collection, getDocs, where, query, deleteDoc, doc, updateDoc } from 'firebase/firestore';
@@ -57,7 +55,7 @@ const SectionTitle = styled.p`
   font-size: 1.5em;
 `;
 
-const PayableComponent = () => {
+const PaidComponent = () => {
   const [launches, setLaunches] = useState([]);
   const [selectedType, setSelectedType] = useState('');
   const [user] = useAuthState(auth);
@@ -67,7 +65,7 @@ const PayableComponent = () => {
     const fetchLaunches = async () => {
       try {
         if (currentUser) {
-          const launchesQuery = query(collection(db, 'launches'), where('userId', '==', currentUser.uid), where('payment', '==', false)); // Correção aqui
+          const launchesQuery = query(collection(db, 'launches'), where('userId', '==', currentUser.uid), where('payment', '==', true)); // Filtrar apenas contas pagas
           const launchesSnapshot = await getDocs(launchesQuery);
           const launchesData = launchesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
           setLaunches(launchesData);
@@ -108,11 +106,9 @@ const PayableComponent = () => {
     }
   };
 
-
-
   return (
     <Container>
-      <SectionTitle>CONTAS A PAGAR </SectionTitle>
+      <SectionTitle>CONTAS PAGAS</SectionTitle>
 
       <StyledTable>
         <TableHead>
@@ -122,34 +118,30 @@ const PayableComponent = () => {
             <th>Valor</th>
             <th>Vencimento</th>
             <th>Pago</th>
-
           </tr>
         </TableHead>
         <tbody>
-          {launches
-            .filter(launch => launch.type === 'expense' && !launch.payment) // Filtrar apenas despesas não pagas
-            .map((launch) => (
-              <TableRow key={launch.id}>
-                <TableCell>Despesa</TableCell>
-                <TableCell>{launch.category}</TableCell>
-                <TableCell><CurrencyFormatter value={launch.amount} /></TableCell>
-                <TableCell><DateFormatter date={launch.date} /></TableCell>
-                <TableCell>
-                  <button onClick={() => handlePaymentToggle(launch.id, launch.payment)}>
-                    {launch.payment ? (
-                      <FontAwesomeIcon icon={faCheckCircle} color='green' />
-                    ) : (
-                      <FontAwesomeIcon icon={faTimesCircle} color='red' />
-                    )}
-                  </button>
-                </TableCell>
-
-              </TableRow>
-            ))}
+          {launches.map((launch) => (
+            <TableRow key={launch.id}>
+              <TableCell>Despesa</TableCell>
+              <TableCell>{launch.category}</TableCell>
+              <TableCell><CurrencyFormatter value={launch.amount} /></TableCell>
+              <TableCell><DateFormatter date={launch.date} /></TableCell>
+              <TableCell>
+                <button onClick={() => handlePaymentToggle(launch.id, launch.payment)}>
+                  {launch.payment ? (
+                    <FontAwesomeIcon icon={faCheckCircle} color='green' />
+                  ) : (
+                    <FontAwesomeIcon icon={faTimesCircle} color='red' />
+                  )}
+                </button>
+              </TableCell>
+            </TableRow>
+          ))}
         </tbody>
       </StyledTable>
     </Container>
   );
 };
 
-export default PayableComponent;
+export default PaidComponent;

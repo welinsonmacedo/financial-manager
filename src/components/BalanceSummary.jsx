@@ -8,7 +8,7 @@ const db = getFirestore(app);
 const Container = styled.div`
   max-width: 600px;
   max-height: 200px;
-  margin: 20px auto;
+ margin: 0 auto;
   padding: 20px;
   background-color: ${({ color }) => color};
   border: 1px solid #ddd;

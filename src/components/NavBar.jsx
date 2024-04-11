@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faTimes, faCog, faBell, faUser } from '@fortawesome/free-solid-svg-icons';
 import { NavLink } from 'react-router-dom';
 import UserStatus from './../config/UserStatus';
+import Notifications from './Notifications';
 
 const Navbar = styled.div`
   background-color: #ffffff;
@@ -122,7 +123,7 @@ const DropdownMenuItem = styled(NavLink)`
 const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isConfigMenuOpen, setIsConfigMenuOpen] = useState(false);
- 
+  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false); // Adicione o estado para controlar a abertura das notificações
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -132,55 +133,50 @@ const NavBar = () => {
     setIsConfigMenuOpen(!isConfigMenuOpen);
   };
 
-  
+  const toggleNotifications = () => {
+    setIsNotificationsOpen(!isNotificationsOpen);
+  };
 
   const scrollToSection = (id) => {
     const element = document.getElementById(id);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
-    setIsOpen(false)
-    
+    setIsOpen(false);
   };
 
   return (
     <Navbar>
-       <ToggleButton onClick={toggleMenu}>
+      <ToggleButton onClick={toggleMenu}>
         {isOpen ? <FontAwesomeIcon icon={faTimes} /> : <FontAwesomeIcon icon={faBars} />}
       </ToggleButton>
-    <UserStatus/>
+      <UserStatus />
       <Logo onClick={() => scrollToSection('home')}>
         <Img isOpen={isOpen} src="GERENTEFINANCEIRO.png" alt="logotipo " />
       </Logo>
-     
+
       <Menu isOpen={isOpen}>
         <MenuItem to="/home">Visão Geral</MenuItem>
         <MenuItem to="/launches">Lançamentos</MenuItem>
         <MenuItem to="/reports">Relatórios</MenuItem>
-        <MenuItem onClick={() => scrollToSection('pricing')}>Limite de Gastos</MenuItem>
         <MenuItem onClick={toggleConfigMenu}>
           <FontAwesomeIcon icon={faCog} />
           <DropdownMenu isOpen={isConfigMenuOpen}>
-
             <DropdownMenuItem to="/categoryexpense">Cadastro Categoria Despesas</DropdownMenuItem>
             <DropdownMenuItem to="/categoryincome">Cadastro Categoria Receitas</DropdownMenuItem>
-
-            <DropdownMenuItem to="/config">Contas</DropdownMenuItem>
-            <DropdownMenuItem to="/config">Cartões de Crédito</DropdownMenuItem>
-            <DropdownMenuItem to="/config">Preferências</DropdownMenuItem>
             <DropdownMenuItem to="/config">Meu Plano</DropdownMenuItem>
-           
           </DropdownMenu>
         </MenuItem>
-        <MenuItem onClick={() => scrollToSection('pricing')}>
+        <MenuItem onClick={toggleNotifications}> {/* Adicione um evento de clique para controlar a abertura/fechamento das notificações */}
           <FontAwesomeIcon icon={faBell} />
         </MenuItem>
-        <MenuItem onClick={() => scrollToSection('pricing')}>
+        <MenuItem to="/profile">
           <FontAwesomeIcon icon={faUser} />
         </MenuItem>
-      
       </Menu>
-     
+
+      {/* Renderize o componente de notificações */}
+      {isNotificationsOpen && <Notifications />}
     </Navbar>
   );
 };

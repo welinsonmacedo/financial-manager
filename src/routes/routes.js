@@ -9,6 +9,8 @@ import ConfigComponent from '../components/ConfigComponent';
 import CreateCategory from '../components/CreateCategory';
 import TermsOfUse from '../components/PrivacyAndAccessibility/TermsOfUse';
 import ReportComponent from '../components/ReportComponent';
+import Profile from '../components/Profile';
+import Notifications from '../components/Notifications';
 
 
 const RoutesApp = () => {
@@ -25,7 +27,8 @@ const RoutesApp = () => {
         <Route exact path="/categoryincome" element={<CreateCategory type="income" />} />
         <Route exact path="/termsofuse" element={<TermsOfUse/>} />
         <Route exact path="/reports" element={<ReportComponent/>} />
-       
+        <Route exact path="/profile" element={<Profile/>} />
+        <Route exact path="/notifications" element={<Notifications/>} />
       </Routes>
     </Router>
   );

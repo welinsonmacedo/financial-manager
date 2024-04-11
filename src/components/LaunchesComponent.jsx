@@ -89,7 +89,7 @@ const LaunchForm = () => {
   const [amount, setAmount] = useState('');
   const [date, setDate] = useState('');
   const [categories, setCategories] = useState([]);
-  const [type, setType] = useState('expense'); 
+  const [type, setType] = useState('expense');
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -113,12 +113,12 @@ const LaunchForm = () => {
     e.preventDefault();
     const currentUser = auth.currentUser;
     if (category && amount && date && currentUser) {
-      let payment = null; 
+      let payment = null;
       if (type === 'expense') {
-        payment = false; 
+        payment = false;
       }
       try {
-        const newLaunch = { type, category, amount, date,payment, userId: currentUser.uid };
+        const newLaunch = { type, category, amount, date, payment, userId: currentUser.uid };
         const launchesCollection = collection(db, 'launches');
         await addDoc(launchesCollection, newLaunch);
         setCategory('');
@@ -166,14 +166,13 @@ const LaunchForm = () => {
               <Input type="number" value={amount} onChange={(e) => setAmount(e.target.value)} />
             </FormGroup>
             <FormGroup>
-              <Label>Data:</Label>
-              <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
+              <Label>Data Vencimento:</Label>
+              <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} disabled={type === 'income'} /> {/* Desabilitar a entrada de data de vencimento quando o tipo for "receita" */}
             </FormGroup>
             <Button type="submit">Adicionar Lançamento</Button>
           </Form>
         </FormContainer>
         <LaunchList />
-       
       </Container>
     </>
   );

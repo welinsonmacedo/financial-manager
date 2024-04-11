@@ -6,7 +6,7 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import CurrencyFormatter from './common/CurrencyFormatter';
 import DateFormatter from './common/DateFormatter';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import { faTrashAlt, faUndo, faCheck } from '@fortawesome/free-solid-svg-icons';
 const db = getFirestore(app);
 
 const Container = styled.div`
@@ -127,7 +127,7 @@ const LaunchList = () => {
             <th>Tipo</th>
             <th>Categoria</th>
             <th>Valor</th>
-            <th>Data</th>
+            <th>Vencimento</th>
             <th>Pago</th>
             <th>Apagar</th>
           </tr>
@@ -140,19 +140,19 @@ const LaunchList = () => {
                 <TableCell>{launch.type === 'expense' ? 'Despesa' : 'Receita'}</TableCell>
                 <TableCell>{launch.category}</TableCell>
                 <TableCell><CurrencyFormatter value={launch.amount} /></TableCell>
-                <TableCell><DateFormatter date={launch.date} /></TableCell>
+                <TableCell>{launch.type === 'expense' ? <DateFormatter date={launch.date} /> : <span style={{ color: 'green' }}>-</span>}</TableCell>
                 <TableCell>
                   {launch.type === 'expense' ? (
-                    <button onClick={() => handlePaymentToggle(launch.id, launch.payment)}>
-                      {launch.payment ? 'Pago' : 'Pagar'}
+                    <button onClick={() => handlePaymentToggle(launch.id, launch.payment)} style={{ backgroundColor: launch.payment ? 'green' : 'red' }}>
+                      {launch.payment ? <FontAwesomeIcon icon={faUndo} /> : <FontAwesomeIcon icon={faCheck} />}
                     </button>
                   ) : (
-                    <span>{launch.payment ? 'Pago' : 'Não aplicável'}</span>
+                    <span style={{ color: 'green' }}>-</span>
                   )}
                 </TableCell>
                 <TableCell>
                   <button onClick={() => handleDelete(launch.id)}>
-                    <FontAwesomeIcon icon={faTrashCan} color='red' cursor='pointer' border='none' />
+                    <FontAwesomeIcon icon={faTrashAlt} color='red' cursor='pointer' border='none' />
                   </button>
                 </TableCell>
               </TableRow>
