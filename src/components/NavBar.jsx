@@ -20,7 +20,6 @@ const Navbar = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-  
   }
 `;
 
@@ -33,6 +32,7 @@ const Logo = styled.a`
   cursor: pointer;
 
   @media (max-width: 900px) {
+    display: none;
   }
 `;
 
@@ -83,7 +83,6 @@ const ToggleButton = styled.button`
   font-size: 1.5em;
   cursor: pointer;
   display: none;
-
 
   @media (max-width: 900px) {
     display: flex;
@@ -161,17 +160,21 @@ const NavBar = () => {
         <MenuItem to="/reports">Relatórios</MenuItem>
         <MenuItem onClick={toggleConfigMenu}>
           <FontAwesomeIcon icon={faCog} />
+          <span className="menu-item-label">Configurações</span>
           <DropdownMenu isOpen={isConfigMenuOpen}>
             <DropdownMenuItem to="/categoryexpense">Cadastro Categoria Despesas</DropdownMenuItem>
             <DropdownMenuItem to="/categoryincome">Cadastro Categoria Receitas</DropdownMenuItem>
             <DropdownMenuItem to="/config">Meu Plano</DropdownMenuItem>
           </DropdownMenu>
         </MenuItem>
-        <MenuItem onClick={toggleNotifications}> {/* Adicione um evento de clique para controlar a abertura/fechamento das notificações */}
+        <MenuItem onClick={toggleNotifications}>
+          
           <FontAwesomeIcon icon={faBell} />
+          <span className="menu-item-label">Notificações</span> 
         </MenuItem>
         <MenuItem to="/profile">
           <FontAwesomeIcon icon={faUser} />
+          <span className="menu-item-label">Perfil</span>
         </MenuItem>
       </Menu>
 

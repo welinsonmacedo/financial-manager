@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth } from "firebase/auth";
+import { getAuth, setPersistence, browserLocalPersistence } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
@@ -15,4 +15,13 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-export { auth, db, app};
+
+setPersistence(auth, browserLocalPersistence)
+  .then(() => {
+    
+  })
+  .catch((error) => {
+    console.error('Erro ao configurar a persistência de autenticação:', error);
+  });
+
+export { auth, db, app };
