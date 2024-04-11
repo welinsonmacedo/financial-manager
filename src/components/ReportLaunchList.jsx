@@ -85,9 +85,10 @@ const LaunchList = () => {
     const calculateTotals = () => {
       let totalIncome = 0;
       let totalExpense = 0;
-
+  
       launches.forEach(launch => {
-        if (new Date(launch.date).getMonth() + 1 === selectedMonth) {
+        const launchDate = new Date(launch.dateRegister);
+        if (launchDate.getMonth() + 1 === selectedMonth) {
           if (launch.type === 'income') {
             totalIncome += parseFloat(launch.amount);
           } else {
@@ -95,17 +96,22 @@ const LaunchList = () => {
           }
         }
       });
-
+  
       setTotalIncome(totalIncome);
       setTotalExpense(totalExpense);
     };
-
+  
     calculateTotals();
   }, [launches, selectedMonth]);
-
+  
   const handleChangeMonth = (e) => {
     setSelectedMonth(parseInt(e.target.value));
   };
+
+  const filteredLaunches = launches.filter(launch => {
+    const launchDate = new Date(launch.dateRegister);
+    return launchDate.getMonth() + 1 === selectedMonth;
+  });
 
   return (
     <Container>
@@ -124,24 +130,25 @@ const LaunchList = () => {
             <th>Tipo</th>
             <th>Categoria</th>
             <th>Valor</th>
-            <th>Data</th>
+            <th>Data de Lançamento</th>
+            <th>Data de Vencimento</th>
           </tr>
         </TableHead>
         <tbody>
-          {launches
-            .filter(launch => new Date(launch.date).getMonth() + 1 === selectedMonth)
-            .map((launch) => (
-              <TableRow key={launch.id}>
-                <TableCell>{launch.type === 'expense' ? 'Despesa' : 'Receita'}</TableCell>
-                <TableCell>{launch.category}</TableCell>
-                <TableCell><CurrencyFormatter value={launch.amount} /></TableCell>
-                <TableCell><DateFormatter date={launch.date} /></TableCell>
-              </TableRow>
-            ))}
+          {filteredLaunches.map((launch) => (
+            <TableRow key={launch.id}>
+              <TableCell>{launch.type === 'income' ? 'Receita' : 'Despesa'}</TableCell>
+              <TableCell>{launch.category}</TableCell>
+              <TableCell><CurrencyFormatter value={launch.amount} /></TableCell>
+              <TableCell><DateFormatter date={launch.dateRegister} /></TableCell>
+              <TableCell>{launch.dateExpired ? <DateFormatter date={launch.dateExpired} /> : 'N/A'}</TableCell>
+            </TableRow>
+          ))}
           <TableRow>
             <TableCell><strong>Total Receita</strong></TableCell>
             <TableCell></TableCell>
             <TableCell><strong><CurrencyFormatter value={totalIncome} /></strong></TableCell>
+            <TableCell></TableCell>
             <TableCell></TableCell>
           </TableRow>
           <TableRow>
@@ -149,11 +156,13 @@ const LaunchList = () => {
             <TableCell></TableCell>
             <TableCell><strong><CurrencyFormatter value={totalExpense} /></strong></TableCell>
             <TableCell></TableCell>
+            <TableCell></TableCell>
           </TableRow>
           <TableRow>
             <TableCell><strong>Saldo Final</strong></TableCell>
             <TableCell></TableCell>
             <TableCell><strong><CurrencyFormatter value={totalIncome - totalExpense} /></strong></TableCell>
+            <TableCell></TableCell>
             <TableCell></TableCell>
           </TableRow>
         </tbody>

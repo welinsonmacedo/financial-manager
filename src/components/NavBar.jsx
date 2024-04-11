@@ -164,7 +164,7 @@ const NavBar = () => {
           <DropdownMenu isOpen={isConfigMenuOpen}>
             <DropdownMenuItem to="/categoryexpense">Cadastro Categoria Despesas</DropdownMenuItem>
             <DropdownMenuItem to="/categoryincome">Cadastro Categoria Receitas</DropdownMenuItem>
-            <DropdownMenuItem to="/config">Meu Plano</DropdownMenuItem>
+            <DropdownMenuItem to="/myplan">Meu Plano</DropdownMenuItem>
           </DropdownMenu>
         </MenuItem>
         <MenuItem onClick={toggleNotifications}>

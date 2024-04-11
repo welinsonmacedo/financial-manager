@@ -87,7 +87,7 @@ const SectionTitle = styled.p`
 const LaunchForm = () => {
   const [category, setCategory] = useState('');
   const [amount, setAmount] = useState('');
-  const [date, setDate] = useState('');
+  const [dateExpired, setDateExpired] = useState('');
   const [categories, setCategories] = useState([]);
   const [type, setType] = useState('expense');
 
@@ -112,18 +112,19 @@ const LaunchForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const currentUser = auth.currentUser;
-    if (category && amount && date && currentUser) {
+    if (category && amount && currentUser) {
       let payment = null;
+      const launchDate = new Date().toISOString().split('T')[0]; 
       if (type === 'expense') {
         payment = false;
       }
       try {
-        const newLaunch = { type, category, amount, date, payment, userId: currentUser.uid };
+        const newLaunch = { type, category, amount, dateRegister: launchDate, dateExpired: type === 'expense' ? dateExpired : null, payment, userId: currentUser.uid };
         const launchesCollection = collection(db, 'launches');
         await addDoc(launchesCollection, newLaunch);
         setCategory('');
         setAmount('');
-        setDate('');
+        setDateExpired('');
         alert('Lançamento adicionado com sucesso!');
       } catch (error) {
         console.error('Erro ao adicionar lançamento:', error);
@@ -165,10 +166,12 @@ const LaunchForm = () => {
               <Label>Valor:</Label>
               <Input type="number" value={amount} onChange={(e) => setAmount(e.target.value)} />
             </FormGroup>
-            <FormGroup>
-              <Label>Data Vencimento:</Label>
-              <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} disabled={type === 'income'} /> {/* Desabilitar a entrada de data de vencimento quando o tipo for "receita" */}
-            </FormGroup>
+            {type === 'expense' && (
+              <FormGroup>
+                <Label>Data Vencimento:</Label>
+                <Input type="date" value={dateExpired} onChange={(e) => setDateExpired(e.target.value)} />
+              </FormGroup>
+            )}
             <Button type="submit">Adicionar Lançamento</Button>
           </Form>
         </FormContainer>

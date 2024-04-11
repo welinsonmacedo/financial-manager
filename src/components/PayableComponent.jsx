@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { getFirestore, collection, getDocs, where, query, deleteDoc, doc, updateDoc } from 'firebase/firestore';
@@ -9,6 +7,7 @@ import CurrencyFormatter from './common/CurrencyFormatter';
 import DateFormatter from './common/DateFormatter';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckCircle, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
+
 const db = getFirestore(app);
 
 const Container = styled.div`
@@ -59,7 +58,7 @@ const SectionTitle = styled.p`
 
 const PayableComponent = () => {
   const [launches, setLaunches] = useState([]);
-  const [selectedType, setSelectedType] = useState('');
+  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
   const [user] = useAuthState(auth);
   const currentUser = auth.currentUser;
 
@@ -67,7 +66,7 @@ const PayableComponent = () => {
     const fetchLaunches = async () => {
       try {
         if (currentUser) {
-          const launchesQuery = query(collection(db, 'launches'), where('userId', '==', currentUser.uid), where('payment', '==', false)); // Correção aqui
+          const launchesQuery = query(collection(db, 'launches'), where('userId', '==', currentUser.uid), where('payment', '==', false));
           const launchesSnapshot = await getDocs(launchesQuery);
           const launchesData = launchesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
           setLaunches(launchesData);
@@ -108,32 +107,42 @@ const PayableComponent = () => {
     }
   };
 
-
+  const handleChangeMonth = (e) => {
+    setSelectedMonth(parseInt(e.target.value));
+  };
 
   return (
     <Container>
       <SectionTitle>CONTAS A PAGAR </SectionTitle>
-
+      <div>
+        <Label htmlFor="month">Mês:</Label>
+        <Select id="month" value={selectedMonth} onChange={handleChangeMonth}>
+          {Array.from({ length: 12 }, (_, i) => i + 1).map(month => (
+            <option key={month} value={month}>{month}</option>
+          ))}
+        </Select>
+      </div>
       <StyledTable>
         <TableHead>
           <tr>
             <th>Tipo</th>
             <th>Categoria</th>
             <th>Valor</th>
+            <th>Data Lançamento</th> 
             <th>Vencimento</th>
             <th>Pago</th>
-
           </tr>
         </TableHead>
         <tbody>
           {launches
-            .filter(launch => launch.type === 'expense' && !launch.payment) // Filtrar apenas despesas não pagas
+            .filter(launch => launch.type === 'expense' && !launch.payment && new Date(launch.dateRegister).getMonth() + 1 === selectedMonth)
             .map((launch) => (
               <TableRow key={launch.id}>
                 <TableCell>Despesa</TableCell>
                 <TableCell>{launch.category}</TableCell>
                 <TableCell><CurrencyFormatter value={launch.amount} /></TableCell>
-                <TableCell><DateFormatter date={launch.date} /></TableCell>
+                <TableCell><DateFormatter date={launch.dateRegister} /></TableCell> 
+                <TableCell><DateFormatter date={launch.dateExpired} /></TableCell>
                 <TableCell>
                   <button onClick={() => handlePaymentToggle(launch.id, launch.payment)}>
                     {launch.payment ? (
@@ -143,7 +152,6 @@ const PayableComponent = () => {
                     )}
                   </button>
                 </TableCell>
-
               </TableRow>
             ))}
         </tbody>

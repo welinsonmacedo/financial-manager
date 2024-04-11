@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { getFirestore, collection, getDocs, where, query, deleteDoc, doc, updateDoc } from 'firebase/firestore';
+import { getFirestore, collection, onSnapshot, where, query, deleteDoc, doc, updateDoc } from 'firebase/firestore';
 import { app, auth } from '../config/firebaseConfig';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import CurrencyFormatter from './common/CurrencyFormatter';
 import DateFormatter from './common/DateFormatter';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashAlt, faUndo, faCheck } from '@fortawesome/free-solid-svg-icons';
+
 const db = getFirestore(app);
 
 const Container = styled.div`
@@ -62,29 +63,18 @@ const LaunchList = () => {
   const currentUser = auth.currentUser;
 
   useEffect(() => {
-    const fetchLaunches = async () => {
-      try {
-        if (currentUser) {
-          const launchesQuery = query(collection(db, 'launches'), where('userId', '==', currentUser.uid));
-          const launchesSnapshot = await getDocs(launchesQuery);
-          const launchesData = launchesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-          setLaunches(launchesData);
-        } else {
-          console.log('Usuário não autenticado.');
-        }
-      } catch (error) {
-        console.error('Erro ao buscar lançamentos:', error);
-      }
-    };
-  
-    fetchLaunches();
+    const unsubscribe = onSnapshot(query(collection(db, 'launches'), where('userId', '==', currentUser.uid)), (snapshot) => {
+      const launchesData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      setLaunches(launchesData);
+    });
+
+    return () => unsubscribe();
   }, [currentUser]);
 
   const handleDelete = async (launchId) => {
     if (window.confirm('Tem certeza que deseja apagar este lançamento?')) {
       try {
         await deleteDoc(doc(db, 'launches', launchId));
-        setLaunches(prevLaunches => prevLaunches.filter(launch => launch.id !== launchId));
       } catch (error) {
         console.error('Erro ao apagar lançamento:', error);
       }
@@ -96,11 +86,6 @@ const LaunchList = () => {
       await updateDoc(doc(db, 'launches', launchId), {
         payment: !paymentStatus
       });
-      setLaunches(prevLaunches =>
-        prevLaunches.map(launch =>
-          launch.id === launchId ? { ...launch, payment: !paymentStatus } : launch
-        )
-      );
     } catch (error) {
       console.error('Erro ao atualizar status de pagamento:', error);
     }

@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../config/firebaseConfig';
 import NavBar from './NavBar';
-
+import Logout from './Auth/Logout'
 const ProfileContainer = styled.div`
   max-width: 400px;
   padding-top: 200px;
@@ -49,26 +49,18 @@ const LogoutButton = styled.button`
 const Profile = () => {
     const [user] = useAuthState(auth);
 
-    const handleLogout = () => {
-        auth.signOut();
-    };
-
+   
     return (
         <>
             <NavBar />
             <ProfileContainer>
                 <ProfileTitle>Perfil do Usuário</ProfileTitle>
-                <ProfileItem>
-                    <ProfileLabel>Nome:</ProfileLabel> <ProfileInfo>{user.displayName}</ProfileInfo>
-                </ProfileItem>
-                <ProfileItem>
-                    <ProfileLabel>Email:</ProfileLabel> <ProfileInfo>{user.email}</ProfileInfo>
-                </ProfileItem>
+                
                 <ProfileItem>
                     <ProfileLabel>Plano Atual:</ProfileLabel> Free<ProfileInfo></ProfileInfo>
                 </ProfileItem>
                 <ProfileItem>
-                    <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
+                   <Logout/>
                 </ProfileItem>
             </ProfileContainer>
         </>

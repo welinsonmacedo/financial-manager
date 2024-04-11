@@ -2,18 +2,24 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
-import { auth } from "../../config/firebaseConfig";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
+import { auth } from "../../config/firebaseConfig";
+import NavBar from './NavBar';
 
+const Container = styled.div`
+ 
+  padding-top: 100px;
+
+`;
 const CreateAnAccountContainer = styled.div`
   max-width: 400px;
   margin: 0 auto;
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 5px;
-  padding-top: 50px;
-  margin-top: 50px;
+  padding-top: 20px;
+
 `;
 
 const Logo = styled.img`
@@ -99,9 +105,29 @@ const CreateAnAccount = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const validateEmail = (email) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(String(email).toLowerCase());
+  };
+
+  const validatePassword = (password) => {
+    const re = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}$/;
+    return re.test(password);
+  };
+
   const handleSignUp = async (e) => {
     e.preventDefault();
     try {
+      if (!validateEmail(email)) {
+        alert('Email inválido. Por favor, insira um email válido.');
+        return;
+      }
+
+      if (!validatePassword(password)) {
+        alert('Senha inválida. Por favor, insira uma senha com pelo menos 8 caracteres, incluindo pelo menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial.');
+        return;
+      }
+
       await createUserWithEmailAndPassword(auth, email, password);
       alert('Cadastro realizado com sucesso!');
     } catch (error) {
@@ -124,45 +150,53 @@ const CreateAnAccount = () => {
   };
 
   return (
-    <CreateAnAccountContainer>
-      <Logo src="GERENTEFINANCEIRO.png" alt="Logo" />
-      <Title>Crie sua conta como quiser</Title>
-      <Form onSubmit={handleSignUp}>
-        <FormGroup>
-          <Label>Seu email:</Label>
-          <Input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </FormGroup>
-        <FormGroup>
-          <Label>Sua senha:</Label>
-          <Input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </FormGroup>
-        <TermsLabel>
-          <Checkbox type="checkbox" required />
-          Li e concordo com os <a href="/termsofuse">termos de uso</a>
-        </TermsLabel>
-        <Button type="submit">Começar a usar</Button>
-      </Form>
-      <SocialLoginContainer>
-        <SocialLoginText>Ou crie uma conta usando uma rede social:</SocialLoginText>
-        <SocialLoginButton color="#db4437" onClick={handleGoogleSignUp}>
-          <FontAwesomeIcon icon={faGoogle} /> Criar uma conta usando o Google
-        </SocialLoginButton>
-      </SocialLoginContainer>
-      <p>Já sou cadastrado. Quero fazer  <a href="/login">login!</a></p>
-      <TermsOfUse>
-        Ao se cadastrar, você concorda com nossos termos de uso. Leia-os atentamente.
-      </TermsOfUse>
-    </CreateAnAccountContainer>
+    <>
+      <NavBar />
+     <Container>
+    
+      <CreateAnAccountContainer>
+        <Logo src="GERENTEFINANCEIRO.png" alt="Logo" />
+        <Title>Crie sua conta como quiser</Title>
+        <Form onSubmit={handleSignUp}>
+          <FormGroup>
+            <Label>Seu email:</Label>
+            <Input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </FormGroup>
+          <FormGroup>
+            <Label>Sua senha:</Label>
+            <Input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </FormGroup>
+          <TermsLabel>
+            <Checkbox type="checkbox" required />
+            Li e concordo com os <a href="/termsofuse">termos de uso</a>
+          </TermsLabel>
+          <Button type="submit">Começar a usar</Button>
+        </Form>
+        <SocialLoginContainer>
+          <SocialLoginText>Ou crie uma conta usando uma rede social:</SocialLoginText>
+          <SocialLoginButton color="#db4437" onClick={handleGoogleSignUp}>
+            <FontAwesomeIcon icon={faGoogle} /> Criar uma conta usando o Google
+          </SocialLoginButton>
+        </SocialLoginContainer>
+        <p>Já sou cadastrado. Quero fazer  <a href="/login">login!</a></p>
+        <TermsOfUse>
+          Ao se cadastrar, você concorda com nossos termos de uso. Leia-os atentamente.
+        </TermsOfUse>
+      </CreateAnAccountContainer>
+    </Container>
+    </>
+   
+
   );
 };
 

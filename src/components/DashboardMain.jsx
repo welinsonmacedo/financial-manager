@@ -105,7 +105,7 @@ const MainDashboard = ({ name }) => {
           let totalRevenue = 0;
           revenueSnapshot.forEach(doc => {
             const data = doc.data();
-            const launchDate = new Date(data.date); 
+            const launchDate = new Date(data.dateRegister); 
             if (launchDate.getMonth() + 1 === currentMonth) {
               totalRevenue += parseFloat(data.amount);
             }
@@ -121,7 +121,7 @@ const MainDashboard = ({ name }) => {
           let totalExpense = 0;
           expenseSnapshot.forEach(doc => {
             const data = doc.data();
-            const launchDate = new Date(data.date); 
+            const launchDate = new Date(data.dateExpired); 
             if (launchDate.getMonth() + 1 === currentMonth) {
               totalExpense += parseFloat(data.amount);
             }

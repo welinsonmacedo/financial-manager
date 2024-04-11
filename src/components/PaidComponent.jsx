@@ -57,7 +57,7 @@ const SectionTitle = styled.p`
 
 const PaidComponent = () => {
   const [launches, setLaunches] = useState([]);
-  const [selectedType, setSelectedType] = useState('');
+  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
   const [user] = useAuthState(auth);
   const currentUser = auth.currentUser;
 
@@ -65,7 +65,7 @@ const PaidComponent = () => {
     const fetchLaunches = async () => {
       try {
         if (currentUser) {
-          const launchesQuery = query(collection(db, 'launches'), where('userId', '==', currentUser.uid), where('payment', '==', true)); // Filtrar apenas contas pagas
+          const launchesQuery = query(collection(db, 'launches'), where('userId', '==', currentUser.uid), where('payment', '==', true));
           const launchesSnapshot = await getDocs(launchesQuery);
           const launchesData = launchesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
           setLaunches(launchesData);
@@ -105,39 +105,54 @@ const PaidComponent = () => {
       console.error('Erro ao atualizar status de pagamento:', error);
     }
   };
+  
 
+  const handleChangeMonth = (e) => {
+    setSelectedMonth(parseInt(e.target.value));
+  }
   return (
     <Container>
       <SectionTitle>CONTAS PAGAS</SectionTitle>
-
+      <div>
+        <Label htmlFor="month">Mês:</Label>
+        <Select id="month" value={selectedMonth} onChange={handleChangeMonth}>
+          {Array.from({ length: 12 }, (_, i) => i + 1).map(month => (
+            <option key={month} value={month}>{month}</option>
+          ))}
+        </Select>
+      </div>
       <StyledTable>
         <TableHead>
           <tr>
             <th>Tipo</th>
             <th>Categoria</th>
             <th>Valor</th>
+            <th>Data Lançamento</th>
             <th>Vencimento</th>
             <th>Pago</th>
           </tr>
         </TableHead>
         <tbody>
-          {launches.map((launch) => (
-            <TableRow key={launch.id}>
-              <TableCell>Despesa</TableCell>
-              <TableCell>{launch.category}</TableCell>
-              <TableCell><CurrencyFormatter value={launch.amount} /></TableCell>
-              <TableCell><DateFormatter date={launch.date} /></TableCell>
-              <TableCell>
-                <button onClick={() => handlePaymentToggle(launch.id, launch.payment)}>
-                  {launch.payment ? (
-                    <FontAwesomeIcon icon={faCheckCircle} color='green' />
-                  ) : (
-                    <FontAwesomeIcon icon={faTimesCircle} color='red' />
-                  )}
-                </button>
-              </TableCell>
-            </TableRow>
-          ))}
+          {launches
+            .filter(launch => new Date(launch.dateRegister).getMonth() + 1 === selectedMonth)
+            .map((launch) => (
+              <TableRow key={launch.id}>
+                <TableCell>Despesa</TableCell>
+                <TableCell>{launch.category}</TableCell>
+                <TableCell><CurrencyFormatter value={launch.amount} /></TableCell>
+                <TableCell><DateFormatter date={launch.dateRegister} /></TableCell>
+                <TableCell><DateFormatter date={launch.dateExpired} /></TableCell>
+                <TableCell>
+                  <button onClick={() => handlePaymentToggle(launch.id, launch.payment)}>
+                    {launch.payment ? (
+                      <FontAwesomeIcon icon={faCheckCircle} color='green' />
+                    ) : (
+                      <FontAwesomeIcon icon={faTimesCircle} color='red' />
+                    )}
+                  </button>
+                </TableCell>
+              </TableRow>
+            ))}
         </tbody>
       </StyledTable>
     </Container>

@@ -6,7 +6,7 @@ import { getAuth } from 'firebase/auth';
 import { getFirestore, collection, addDoc } from 'firebase/firestore';
 import { app } from '../config/firebaseConfig';
 import NavBar from './NavBar';
-
+import { useAuthState } from 'react-firebase-hooks/auth';
 const db = getFirestore(app);
 const auth = getAuth(app); 
 const user = auth.currentUser; 
@@ -99,7 +99,7 @@ const CreateCategory = ({ type }) => {
     const [name, setName] = useState('');
     const [color, setColor] = useState('');
     const [icon, setIcon] = useState('');
-
+    const [user] = useAuthState(auth);
     
     const iconOptions = [
         { name: 'faCoffee', icon: faCoffee },

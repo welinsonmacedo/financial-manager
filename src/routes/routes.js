@@ -11,6 +11,8 @@ import TermsOfUse from '../components/PrivacyAndAccessibility/TermsOfUse';
 import ReportComponent from '../components/ReportComponent';
 import Profile from '../components/Profile';
 import Notifications from '../components/Notifications';
+import MyPlan from './../components/MyPlan';
+import UpdatePlan from '../components/UpdatePlan';
 
 
 const RoutesApp = () => {
@@ -29,6 +31,8 @@ const RoutesApp = () => {
         <Route exact path="/reports" element={<ReportComponent/>} />
         <Route exact path="/profile" element={<Profile/>} />
         <Route exact path="/notifications" element={<Notifications/>} />
+        <Route exact path="/myplan" element={<MyPlan/>} />
+        <Route exact path="/updateplan" element={<UpdatePlan/>} />
       </Routes>
     </Router>
   );
