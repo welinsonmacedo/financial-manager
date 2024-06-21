@@ -13,11 +13,10 @@ const Home = () => {
             <MainDashboard />
             
                 <BalanceComponent />
-               
+
                 <p style={{textAlign:'center',marginTop:20}}>Desenvolvido por WelinsonMacedo </p>
-         
-            
-         
+
+
         </>
     )
 }

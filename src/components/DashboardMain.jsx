@@ -180,7 +180,6 @@ const MainDashboard = ({ name }) => {
           <Title>Relatórios</Title>
         </Action>
       </QuickAccess>
-     
     </Container>
   );
 };

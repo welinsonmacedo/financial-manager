@@ -42,7 +42,6 @@ const CloseButton = styled.button`
 const Notifications = () => {
   const [notifications, setNotifications] = useState([
     { id: 1, title: 'Alerta', message: 'Ainda sem notificações' },
-   
   ]);
 
   const handleClose = (id) => {

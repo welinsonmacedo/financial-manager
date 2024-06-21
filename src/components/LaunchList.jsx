@@ -90,6 +90,7 @@ const SectionTitle = styled.p`
   margin-top: 20px;
   font-size: 1.5em;
 `;
+
 const ButtonCustom = styled.button`
 padding: 7px;
 border: none;
@@ -97,6 +98,7 @@ border-radius: 5px;
 font-weight: 600;
 color: #ffff;
 `;
+
 
 const LaunchList = () => {
   const [launches, setLaunches] = useState([]);
@@ -179,6 +181,8 @@ const LaunchList = () => {
             <th>Vencimento</th>
             <th>Situação</th>
             <th>Excluir</th>
+            <th>Apagar</th>
+
           </tr>
         </TableHead>
         <tbody>
@@ -203,6 +207,7 @@ const LaunchList = () => {
                 <TableCell>{launch.type === 'expense' ? <DateFormatter date={launch.dateExpired} /> : <span style={{ color: 'green' }}>-</span>}</TableCell>
                 <TableCell>
                   {launch.type === 'expense' ? (
+
                     <ButtonCustom onClick={() => handlePaymentToggle(launch.id, launch.payment)} style={{ backgroundColor: launch.payment ? 'green' : 'red' }}>
                       {launch.payment ?<p>Pago</p> :<p>Pendente</p>}
                     </ButtonCustom>
