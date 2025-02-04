@@ -51,6 +51,7 @@ const Menu = styled.ul`
     width: 100%;
     background-color: #ffffff;
     padding: 5px;
+    padding-top: 3rem;
   }
 `;
 
@@ -58,6 +59,7 @@ const MenuItem = styled(NavLink)`
   margin-right: 20px;
   font-size: 15px;
   font-weight: 500;
+  color:#000;
   &:hover {
     border-bottom: 2px solid gray;
     cursor: pointer;
@@ -85,7 +87,10 @@ const ToggleButton = styled.button`
   display: none;
 
   @media (max-width: 900px) {
-    display: flex;
+    display:flex;
+    position:absolute;
+    top:20px;
+    left:90%;
     padding-left: 5px;
   }
 `;
