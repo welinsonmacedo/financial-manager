@@ -50,6 +50,8 @@ const FormGroup = styled.div`
 const Label = styled.label`
   font-size: 1em;
   margin-bottom: 5px;
+  color: #ffffff;
+  font-weight:bold;
 `;
 
 const Input = styled.input`
@@ -83,6 +85,8 @@ const Button = styled.button`
 const SectionTitle = styled.p`
   margin-top: 20px;
   font-size: 1.5em;
+  color: #ffffff;
+  font-weight:bold;
 `;
 
 const LaunchForm = () => {

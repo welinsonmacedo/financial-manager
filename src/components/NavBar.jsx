@@ -50,7 +50,7 @@ const Menu = styled.ul`
     right: 190px;
     width: 100%;
     background-color: #ffffff;
-    padding: 5px;
+    padding: 1.5rem;
     padding-top: 3rem;
   }
 `;
@@ -60,6 +60,7 @@ const MenuItem = styled(NavLink)`
   font-size: 15px;
   font-weight: 500;
   color:#000;
+ 
   &:hover {
     border-bottom: 2px solid gray;
     cursor: pointer;
@@ -71,6 +72,7 @@ const MenuItem = styled(NavLink)`
     font-size: 20px;
     width: 100%;
     display: block;
+    margin:0 auto;
     padding: 5px;
   }
   &:hover {
@@ -164,7 +166,6 @@ const NavBar = () => {
         <MenuItem to="/launches">Lançamentos</MenuItem>
         <MenuItem to="/reports">Relatórios</MenuItem>
         <MenuItem onClick={toggleConfigMenu}>
-          <FontAwesomeIcon icon={faCog} />
           <span className="menu-item-label">Configurações</span>
           <DropdownMenu isOpen={isConfigMenuOpen}>
             <DropdownMenuItem to="/categoryexpense">Cadastro Categoria Despesas</DropdownMenuItem>
@@ -173,12 +174,9 @@ const NavBar = () => {
           </DropdownMenu>
         </MenuItem>
         <MenuItem onClick={toggleNotifications}>
-          
-          <FontAwesomeIcon icon={faBell} />
           <span className="menu-item-label">Notificações</span> 
         </MenuItem>
         <MenuItem to="/profile">
-          <FontAwesomeIcon icon={faUser} />
           <span className="menu-item-label">Perfil</span>
         </MenuItem>
       </Menu>

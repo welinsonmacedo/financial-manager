@@ -21,16 +21,19 @@ const Container = styled.div`
 `;
 
 const Title = styled.p`
- 
+
+    font-weight: bold;
+    font-size: 20px;
+    color: #ffffff;
+   
+
   font-size: 1.5em;
 `;
 
-const BalanceLabel = styled.span`
-  font-weight: bold;
-`;
 
 const BalanceValueContainer = styled.div`
   font-size: 2em;
+  color: #ffffff;
 `;
 
 const BalanceComponent = () => {

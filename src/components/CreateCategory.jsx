@@ -32,6 +32,8 @@ justify-content: center;
 
 const Label = styled.label`
   margin-bottom: 8px;
+  color: #ffffff;
+  font-weight: 700
 `;
 const Section = styled.div`
 display: flex;
@@ -74,40 +76,25 @@ const Button = styled.button`
   border-radius: 5px;
   font-size: 1em;
   margin: 15px;
+ 
   cursor: pointer;
   &:hover {
     background-color: #15241c; 
   }
   @media (max-width: 900px) {
-    
+    width:100%;
   }
 `;
 
-const IconSelector = styled.div`
-  display: flex;
-  justify-content: space-around;
-  width: 200px;
-`;
 
-const IconOption = styled.div`
-  font-size: 24px;
-  cursor: pointer;
-  ${({ selected }) => selected && 'color: #007bff;'}
-`;
 
 const CreateCategory = ({ type }) => {
     const [name, setName] = useState('');
     const [color, setColor] = useState('');
-    const [icon, setIcon] = useState('');
+ 
     const [user] = useAuthState(auth);
     
-    const iconOptions = [
-        { name: 'faCoffee', icon: faCoffee },
-        { name: 'faCar', icon: faCar },
-        { name: 'faPlane', icon: faPlane },
-        { name: 'faUtensils', icon: faUtensils },
-        { name: 'faDog ', icon: faDog }
-    ];
+  
 
     const handleCreateCategory = async (e) => {
       e.preventDefault();
@@ -117,7 +104,6 @@ const CreateCategory = ({ type }) => {
           const categoryData = {
             name,
             color,
-            icon,
             type,
             userId: user.uid
           };
@@ -125,7 +111,6 @@ const CreateCategory = ({ type }) => {
           await addDoc(categoriesCollection, categoryData);
           setName('');
           setColor('');
-          setIcon('');
           alert('Categoria criada com sucesso!');
         } else {
           
@@ -148,14 +133,7 @@ const CreateCategory = ({ type }) => {
 
                 <Section ><ViewColor color={color}><InputColor title='Cor: click no circulo para selecionar a cor' type="color" value={color} onChange={(e) => setColor(e.target.value)} required /></ViewColor>  <Input type="text" value={name} onChange={(e) => setName(e.target.value)} required /></Section>
                 
-                <Label>Ícone:</Label>
-                <IconSelector>
-                    {iconOptions.map((option, index) => (
-                        <IconOption key={index} selected={icon === option.name} onClick={() => setIcon(option.name)}>
-                            <FontAwesomeIcon icon={option.icon} />
-                        </IconOption>
-                    ))}
-                </IconSelector>
+              
                 <Button type="submit">Criar Categoria</Button>
             </Form>
         </Container>

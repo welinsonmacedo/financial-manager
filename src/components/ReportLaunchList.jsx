@@ -18,24 +18,26 @@ const Container = styled.div`
 
 
 const TableHead = styled.thead`
-  background-color: #30b94e;
+  background-color: #2a302b;
   color: #fff;
 `;
 
 const TableRow = styled.tr`
   &:nth-child(even) {
-    background-color: #f2f2f2;
+   
   }
 `;
 
 const TableCell = styled.td`
   padding: 8px;
   border: 1px solid #ddd;
+  color:#fff;
 `;
 
 const Label = styled.label`
   font-size: 1em;
   margin-bottom: 5px;
+  color:#fff;
 `;
 
 const Select = styled.select`
@@ -49,6 +51,7 @@ const Select = styled.select`
 const SectionTitle = styled.p`
   margin-top: 20px;
   font-size: 1.5em;
+  color:#fff;
 `;
 const StyledTable = styled.table`
  width: 100%;
@@ -67,19 +70,22 @@ const StyledTable = styled.table`
     td,
     tr {
       display: block;
+      color:#fff;
     }
     tbody tr {
       margin-bottom: 10px;
+      color:#fff;
     }
     th,
     td {
       text-align: left;
       border-bottom: none;
       padding: 8px;
+      color:#fff;
     }
     th {
-      background-color: #30b94e;
-      color: #fff;
+    
+      color: #130c0c;
       display: none;
     }
     td {
@@ -171,7 +177,7 @@ const LaunchList = () => {
         <tbody>
           {filteredLaunches.map((launch) => (
             <TableRow key={launch.id}>
-              <TableCell style={launch.type === 'income' ? { backgroundColor: '#55ff6f', color: '#fff' } : { backgroundColor: '#ec9d41', color: '#fff' }}>
+              <TableCell style={launch.type === 'income' ? { backgroundColor: '#58a551', color: '#29032b' } : { backgroundColor: '#ec9d41', color: '#cec8c8' }}>
                 {launch.type === 'income' ? 'Receita' : 'Despesa'}
               </TableCell>
               <TableCell>{launch.category}</TableCell>

@@ -15,7 +15,9 @@ const Container = styled.div`
 
 const Greeting = styled.p`
   font-size: 1.2em;
-`;
+  color:#fff;
+  font-weight:700;
+`
 
 const UserName = styled.span`
   font-weight: bold;
@@ -24,10 +26,17 @@ const UserName = styled.span`
 const SectionTitle = styled.p`
   margin-top: 20px;
   font-size: 1.5em;
+  font-weight: bold;
+  color:#fff;
 `;
 
 const Section = styled.div`
   margin-top: 10px;
+  background-color:#fff;
+  padding:1rem 2rem;
+  @media (max-width: 900px) {
+
+  }
 `;
 
 const SectionInfo = styled.div`
@@ -38,6 +47,7 @@ const SectionInfo = styled.div`
   align-items: center;
   flex-wrap: wrap;
   gap: 15px;
+
 `;
 
 const SectionInfoGroup = styled.div`
@@ -50,6 +60,10 @@ const SectionInfoGroup = styled.div`
   padding: 5px;
   border-radius: 10px;
   margin-bottom: 20px;
+  background-color:#fff;
+   @media (max-width: 900px) {
+ width:90%;
+  }
 `;
 
 const QuickAccess = styled.div`
@@ -59,6 +73,7 @@ const QuickAccess = styled.div`
   flex-wrap: wrap;
   gap: 2rem;
   padding: 2rem;
+ 
 `;
 
 const Action = styled(NavLink)`
@@ -68,9 +83,10 @@ const Action = styled(NavLink)`
   padding: 10px;
   cursor: pointer;
   transition: background-color 0.3s ease;
-
+  background-color: #f0f0f0;
   &:hover {
-    background-color: #f0f0f0;
+    background-color: #0f690b;
+    color:#fff;
   }
 `;
 
@@ -81,6 +97,7 @@ const Icon = styled.span`
 
 const Title = styled.p`
   font-size: 1.1em;
+  font-weight: bold;
 `;
 
 const MainDashboard = ({ name }) => {

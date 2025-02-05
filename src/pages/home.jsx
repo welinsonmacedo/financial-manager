@@ -14,7 +14,7 @@ const Home = () => {
             
                 <BalanceComponent />
 
-                <p style={{textAlign:'center',marginTop:20}}>Desenvolvido por WelinsonMacedo </p>
+                <p style={{textAlign:'center',marginTop:20 ,fontWeight:"bold",color:"#ffff"}}>Desenvolvido por WelinsonMacedo </p>
 
 
         </>
