@@ -10,16 +10,17 @@ import NavBar from './NavBar';
 import CustomAlert from '../common/CustomAlert'; 
 
 const Container = styled.div`
-  padding-top: 100px;
+  padding-top: 50px;
 `;
 
 const LoginContainer = styled.div`
   max-width: 400px;
+  background-color: #fff;
   margin: 0 auto;
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 5px;
-  padding-top: 50px;
+  padding-top: 30px;
   margin-top: 50px;
 `;
 
@@ -68,6 +69,7 @@ const Button = styled.button`
 
 const SocialLoginContainer = styled.div`
   margin-top: 20px;
+  padding-top: 2rem;
 `;
 
 const SocialLoginText = styled.p`
@@ -92,6 +94,10 @@ const ForgotPassword = styled.p`
   font-size: 0.8em;
   color: #555;
   text-align: right;
+`;
+const Text = styled.p`
+  font-size: 0.8em;
+ 
 `;
 
 const Login = () => {
@@ -190,7 +196,7 @@ const Login = () => {
               <FontAwesomeIcon icon={faGoogle} /> Entrar com o Google
             </SocialLoginButton>
           </SocialLoginContainer>
-          <p>Ainda não tem uma conta? <a href="/createaccount">Crie uma agora!</a></p>
+          <Text>Ainda não tem uma conta? <a href="/createaccount">Crie uma agora!</a></Text>
         </LoginContainer>
       </Container>
     </>

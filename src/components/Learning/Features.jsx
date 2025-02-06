@@ -3,7 +3,8 @@ import styled from 'styled-components';
 
 const FeaturesContainer = styled.div`
   background-color: #f5f5f5;
-  padding: 50px 20px;
+  padding: 7rem 20px;
+  min-height: 80vh;
   text-align: center;
 `;
 

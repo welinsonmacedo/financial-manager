@@ -4,15 +4,26 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../config/firebaseConfig';
 import NavBar from './NavBar';
 import Logout from './Auth/Logout'
-const ProfileContainer = styled.div`
-  max-width: 400px;
-  padding-top: 200px;
-  margin: 0 auto;
+import { NavLink } from 'react-router-dom';
+import { Pencil } from "lucide-react";
+import UserDetailsView from './User/UserDetailsView';
 
-  background-color: #f9f9f9;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+const Container = styled.div`
+padding-top:4rem;
+  width: 100%;
+  min-height: 80vh;
+display: flex;
+justify-content: center;
+align-items: center;
 `;
+const ProfileContainer = styled.div`
+ max-width: 400px;
+ padding: 1rem 3rem;
+ margin-top: 5rem;
+background-color: aliceblue;
+`;
+
+
 
 const ProfileTitle = styled.h2`
   text-align: center;
@@ -21,7 +32,7 @@ const ProfileTitle = styled.h2`
 `;
 
 const ProfileItem = styled.div`
-  margin-bottom: 15px;
+  margin: 15px;
 `;
 
 const ProfileLabel = styled.span`
@@ -33,18 +44,10 @@ const ProfileInfo = styled.span`
   color: #777;
 `;
 
-const LogoutButton = styled.button`
-  padding: 10px 20px;
-  background-color: #e74c3c;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  &:hover {
-    background-color: #c0392b;
-  }
-`;
+const Link = styled(NavLink)`
+  margin: 15px 0;
+  padding: 3rem 0;
+`
 
 const Profile = () => {
     const [user] = useAuthState(auth);
@@ -53,9 +56,12 @@ const Profile = () => {
     return (
         <>
             <NavBar />
+            <Container>
             <ProfileContainer>
                 <ProfileTitle>Perfil do Usuário</ProfileTitle>
-                
+            
+                <Link to="/userdetails"><Pencil size={20} /> Editar</Link>
+                <UserDetailsView/>
                 <ProfileItem>
                     <ProfileLabel>Plano Atual:</ProfileLabel> Free<ProfileInfo></ProfileInfo>
                 </ProfileItem>
@@ -63,6 +69,8 @@ const Profile = () => {
                    <Logout/>
                 </ProfileItem>
             </ProfileContainer>
+            </Container>
+          
         </>
 
     );

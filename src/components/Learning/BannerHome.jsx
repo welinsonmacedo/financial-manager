@@ -5,15 +5,15 @@ display: flex;
 flex-direction: column;
 align-items: center;
 justify-content: center;
-padding-top: 3rem;
 width: 100%;
+padding: 9rem 5rem;
 @media (max-width: 900px) {
   padding-top: 9rem;
   }
 `
 const BannerContainer = styled.div`
-  background-color: #ffffff;
-  color: #000000;
+background-color: rgb(86, 8, 131);
+  color: #ffffff;
   padding: 20px;
   text-align: center;
   display: flex;
@@ -72,6 +72,7 @@ const Button = styled.button`
   border: none;
   border-radius: 5px;
   font-size: 1em;
+  font-weight:700;
   cursor: pointer;
   &:hover {
     background-color: #d8c794;
@@ -93,7 +94,7 @@ const BannerHome = () => {
                     </BannerText>
                 </SectionText>
                 <SectionImg>
-                    <BannerImg src="LearningBannerHome.png" />
+                    <BannerImg src="" />
                 </SectionImg>
 
 

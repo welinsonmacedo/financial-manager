@@ -13,6 +13,7 @@ const Container = styled.div`
 `;
 
 const CreateAnAccountContainer = styled.div`
+background-color: #fff;
   max-width: 400px;
   margin: 0 auto;
   padding: 20px;
@@ -75,6 +76,7 @@ const Button = styled.button`
 
 const SocialLoginContainer = styled.div`
   margin-top: 20px;
+  padding-top: 2rem;
 `;
 
 const SocialLoginText = styled.p`
@@ -98,6 +100,10 @@ const SocialLoginButton = styled.button`
 const TermsOfUse = styled.p`
   font-size: 0.8em;
   color: #555;
+`;
+const Text = styled.p`
+  font-size: 0.8em;
+ 
 `;
 
 const CreateAnAccount = () => {
@@ -214,7 +220,7 @@ const CreateAnAccount = () => {
               <FontAwesomeIcon icon={faGoogle} /> Criar uma conta usando o Google
             </SocialLoginButton>
           </SocialLoginContainer>
-          <p>Já sou cadastrado. Quero fazer  <a href="/login">login!</a></p>
+          <Text>Já sou cadastrado. Quero fazer  <a href="/login">login!</a></Text>
           <TermsOfUse>
             Ao se cadastrar, você concorda com nossos termos de uso. Leia-os atentamente.
           </TermsOfUse>

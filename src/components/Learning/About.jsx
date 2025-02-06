@@ -2,13 +2,13 @@ import React from 'react';
 import styled from 'styled-components';
 
 const AboutContainer = styled.div`
-  padding: 50px 20px;
+  padding: 6rem 20px;
   min-height: 80vh;
 `;
 
 const AboutTitle = styled.h2`
   font-size: 2em;
-  color: #333;
+  color: #10fa1c;
   text-align: center;
   margin-bottom: 30px;
 `;
@@ -17,15 +17,17 @@ const AboutContent = styled.div`
   max-width: 800px;
   margin: 0 auto;
   text-align: justify;
+  color:#fff;
+  
 `;
 
 const About = () => {
   return (
     <AboutContainer id="about">
-      <AboutTitle>Quem Somos</AboutTitle>
+      <AboutTitle>Gerente Financeiro</AboutTitle>
       <AboutContent>
         <p>
-          O Gerente Financeiro é um aplicativo web desenvolvido para ajudar pessoas a terem um controle completo sobre suas finanças pessoais.
+          É um sistema web desenvolvido para ajudar pessoas a terem um controle completo sobre suas finanças pessoais.
         </p>
         <p>
           Nosso objetivo é fornecer uma solução prática e eficiente para que você possa gerenciar suas receitas, despesas, investimentos e objetivos financeiros de forma fácil e segura.

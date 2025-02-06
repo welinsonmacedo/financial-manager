@@ -2,13 +2,15 @@ import React from 'react';
 import styled from 'styled-components';
 
 const PricingContainer = styled.div`
-  padding: 50px 20px;
+  padding: 7rem 20px;
+  min-height: 80vh;
   text-align: center;
+  background-color: #fff;
 `;
 
 const PricingTitle = styled.h2`
   font-size: 2em;
-  color: #333;
+  color: #10fa1c;
   margin-bottom: 30px;
 `;
 

@@ -1,6 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth, setPersistence, browserLocalPersistence } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
+import { getStorage } from 'firebase/storage';
 
 const firebaseConfig = {
   apiKey: "AIzaSyAdaEOBpCCHQvy8a3apaVLpvUm75kaCkXs",
@@ -14,7 +15,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
-
+const storage = getStorage(app);
 
 setPersistence(auth, browserLocalPersistence)
   .then(() => {
@@ -24,4 +25,5 @@ setPersistence(auth, browserLocalPersistence)
     console.error('Erro ao configurar a persistência de autenticação:', error);
   });
 
-export { auth, db, app };
+export { auth, db, storage, app };
+  

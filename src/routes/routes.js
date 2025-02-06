@@ -13,6 +13,7 @@ import Profile from '../components/Profile';
 import Notifications from '../components/Notifications';
 import MyPlan from './../components/MyPlan';
 import UpdatePlan from '../components/UpdatePlan';
+import UserDetails from '../components/User/UserDatails';
 
 
 const RoutesApp = () => {
@@ -33,6 +34,7 @@ const RoutesApp = () => {
         <Route exact path="/notifications" element={<Notifications/>} />
         <Route exact path="/myplan" element={<MyPlan/>} />
         <Route exact path="/updateplan" element={<UpdatePlan/>} />
+        <Route exact path="/userdetails" element={<UserDetails/>} />
       </Routes>
     </Router>
   );

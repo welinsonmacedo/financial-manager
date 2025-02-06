@@ -27,7 +27,7 @@ const SectionTitle = styled.p`
   margin-top: 20px;
   font-size: 1.5em;
   font-weight: bold;
-  color:#fff;
+  color:#0c1a0e;
 `;
 
 const Section = styled.div`
@@ -186,7 +186,7 @@ const MainDashboard = ({ name }) => {
           </Section>
         </SectionInfoGroup>
       </SectionInfo>
-      <SectionTitle>Acesso rápido</SectionTitle>
+      <Greeting>Acesso rápido</Greeting>
       <QuickAccess>
         <Action to='/launches'>
             <Icon><FontAwesomeIcon icon={faDollarSign} color='green' /></Icon>
