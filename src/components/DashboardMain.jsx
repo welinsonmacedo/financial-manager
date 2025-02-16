@@ -23,11 +23,8 @@ const UserName = styled.span`
   font-weight: bold;
 `;
 
-const SectionTitle = styled.p`
-  margin-top: 20px;
-  font-size: 1.5em;
-  font-weight: bold;
-  color:#0c1a0e;
+const SectionIcon= styled.img`
+ width:50px;
 `;
 
 const Section = styled.div`
@@ -174,13 +171,13 @@ const MainDashboard = ({ name }) => {
       <Greeting>{greeting}, <UserName>{name}</UserName>!</Greeting>
       <SectionInfo>
         <SectionInfoGroup>
-          <SectionTitle>Receita mensal</SectionTitle>
+          <SectionIcon src="receita.png"/>
           <Section>
             <p>R$ {monthlyRevenue.toFixed(2)}</p>
           </Section>
         </SectionInfoGroup>
         <SectionInfoGroup>
-          <SectionTitle>Despesa mensal</SectionTitle>
+          <SectionIcon src="despesa.png"/>
           <Section>
             <p>R$ {monthlyExpense.toFixed(2)}</p>
           </Section>
